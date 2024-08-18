@@ -1,5 +1,19 @@
 {
-  "name": "hono-starter",
+  "name": "serambi-api",
+  "version": "0.1.0",
+  "description": "Serambi API",
+  "homepage": "https://github.com/bps-kota-bontang/serambi-api#readme",
+  "bugs": {
+    "url": "https://github.com/bps-kota-bontang/serambi-api/issues",
+    "email": "ipds6474@gmail.com"
+  },
+  "license": "MIT",
+  "author": "Arif Rahman Hakim",
+  "main": "src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bps-kota-bontang/serambi-api.git"
+  },
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "start": "bun run src/index.ts",
