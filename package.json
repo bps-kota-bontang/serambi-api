@@ -4,6 +4,9 @@
     "dev": "bun run --hot src/index.ts",
     "start": "bun run src/index.ts",
     "generate": "prisma generate",
+    "seed": "NODE_ENV=development bunx dotenv -e .env.development -- bun prisma/seed.ts",
+    "seed:staging": "NODE_ENV=staging bunx dotenv -e .env.staging -- bun prisma/seed.ts",
+    "seed:production": "NODE_ENV=production bunx dotenv -e .env.production -- bun prisma/seed.ts",
     "migrate": "dotenv -e .env.development -- bunx prisma migrate dev",
     "migrate:staging": "dotenv -e .env.staging -- bunx prisma migrate dev",
     "migrate:production": "dotenv -e .env.production -- bunx prisma migrate dev"
