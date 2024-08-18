@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/libs/prisma";
 import { Result } from "@/types/result";
 import { generateToken } from "@/utils/jwt";
 
