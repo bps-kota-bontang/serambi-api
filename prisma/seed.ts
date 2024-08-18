@@ -1,15 +1,13 @@
+import { DATABASE_URL, NODE_ENV } from "@/configs/constant";
 import { PrismaClient, User } from "@/prisma/generated";
-
-const url = Bun.env.DATABASE_URL;
-const nodeEnv = Bun.env.NODE_ENV;
 
 const consoleIterator = console[Symbol.asyncIterator]();
 
-console.log("Environment:", nodeEnv);
-console.log("Connecting to Database:", url);
+console.log("Environment:", NODE_ENV);
+console.log("Connecting to Database:", DATABASE_URL);
 
 const prisma = new PrismaClient({
-  datasourceUrl: url,
+  datasourceUrl: DATABASE_URL,
 });
 
 const populateUser = async () => {
@@ -49,7 +47,7 @@ const seeding = async () => {
 };
 
 const main = async () => {
-  if (nodeEnv !== "development") {
+  if (NODE_ENV !== "development") {
     console.log(
       "\nYou are not in a development environment. Are you sure you want to continue? (yes/No)"
     );
@@ -70,7 +68,7 @@ main()
     console.error(e);
   })
   .finally(async () => {
-    console.log("Disconnecting from Database:", url);
+    console.log("Disconnecting from Database:", DATABASE_URL);
     await prisma.$disconnect();
     process.exit(1);
   });
