@@ -121,7 +121,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/arif/BPS/Apps/hono-starter/prisma/generated",
+      "value": "/Users/arif/BPS/Apps/Serambi/serambi-api/prisma/generated",
       "fromEnvVar": null
     },
     "config": {
@@ -143,12 +143,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/arif/BPS/Apps/hono-starter/prisma/schema.prisma",
+    "sourceFilePath": "/Users/arif/BPS/Apps/Serambi/serambi-api/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "..",
   "clientVersion": "5.18.0",
@@ -157,7 +156,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
