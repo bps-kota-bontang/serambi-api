@@ -2,7 +2,11 @@
   "name": "hono-starter",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "start": "bun run src/index.ts"
+    "start": "bun run src/index.ts",
+    "generate": "prisma generate",
+    "migrate": "dotenv -e .env.development -- bunx prisma migrate dev",
+    "migrate:staging": "dotenv -e .env.staging -- bunx prisma migrate dev",
+    "migrate:production": "dotenv -e .env.production -- bunx prisma migrate dev"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
