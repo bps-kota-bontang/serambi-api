@@ -3,13 +3,9 @@ import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import { prettyJSON } from "hono/pretty-json";
 import v1 from "@/api/v1";
-import connectDB from "@/libs/mongoose";
 import { auth } from "@/middlewares/auth";
 
-
 const app = new Hono();
-
-connectDB();
 
 app.use(prettyJSON());
 app.use(cors());
