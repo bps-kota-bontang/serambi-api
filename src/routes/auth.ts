@@ -1,25 +1,14 @@
 import { login } from "@/services/auth";
-import { LoginPayload, LoginSchema } from "@/validations/auth";
+import { validateRequest } from "@/utils/validation";
+import { LoginSchema } from "@/validations/auth";
 import { Hono } from "hono";
 
 const app = new Hono();
 
-app.post("/login", async (c) => {
-  const payload = await c.req.json<LoginPayload>();
-  const parsed = LoginSchema.safeParse(payload);
+app.post("/login", validateRequest("json", LoginSchema), async (c) => {
+  const validated = c.req.valid("json");
 
-  if (!parsed.success) {
-    return c.json(
-      {
-        data: null,
-        message: "Invalid payload",
-        errors: parsed.error.issues,
-      },
-      400
-    );
-  }
-
-  const result = await login(parsed.data.email, parsed.data.password);
+  const result = await login(validated.email, validated.password);
 
   return c.json(
     {
