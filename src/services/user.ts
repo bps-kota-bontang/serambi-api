@@ -2,8 +2,28 @@ import prisma from "@/libs/prisma";
 import { User } from "@/prisma/generated";
 import { Result } from "@/types/result";
 
-export async function getUsers(): Promise<Result<User[]>> {
-  const users = await prisma.user.findMany();
+export async function getUsers(): Promise<
+  Result<Omit<User, "password" | "createdAt" | "updatedAt">[]>
+> {
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      nip: true,
+      email: true,
+      teams: {
+        select: {
+          team: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          isAdmin: true,
+        },
+      },
+    },
+  });
 
   return {
     data: users,
@@ -12,8 +32,27 @@ export async function getUsers(): Promise<Result<User[]>> {
   };
 }
 
-export async function getUser(userId: string): Promise<Result<User>> {
+export async function getUser(
+  userId: string
+): Promise<Result<Omit<User, "password" | "createdAt" | "updatedAt">>> {
   const user = await prisma.user.findFirst({
+    select: {
+      id: true,
+      name: true,
+      nip: true,
+      email: true,
+      teams: {
+        select: {
+          team: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          isAdmin: true,
+        },
+      },
+    },
     where: {
       id: userId,
     },
