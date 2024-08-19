@@ -93,7 +93,7 @@ export async function addServiceTeams(
   return {
     data: null,
     message: "successfully added service teams",
-    code: 200,
+    code: 201,
   };
 }
 

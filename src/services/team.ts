@@ -102,7 +102,7 @@ export async function addTeamUsers(
   return {
     data: null,
     message: "successfully added team users",
-    code: 200,
+    code: 201,
   };
 }
 
