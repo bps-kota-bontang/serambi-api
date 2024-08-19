@@ -1,7 +1,7 @@
 import prisma from "@/libs/prisma";
 import { Service } from "@/prisma/generated";
 import { Result } from "@/types/result";
-import { CreateServicePayload } from "@/validations/service";
+import { AddServiceTeamsPayload, CreateServicePayload, DeleteServiceTeamsPayload } from "@/validations/service";
 
 export async function getServices(): Promise<Result<Service[]>> {
   const services = await prisma.service.findMany({
@@ -76,5 +76,43 @@ export async function createService(
     data: service,
     message: "successfully created service",
     code: 201,
+  };
+}
+
+export async function addServiceTeams(
+  serviceId: string,
+  payload: AddServiceTeamsPayload
+): Promise<Result<Service>> {
+  await prisma.sevicesOnTeams.createMany({
+    data: payload.map((user) => ({
+      serviceId: serviceId,
+      teamId: user.teamId
+    })),
+  });
+
+  return {
+    data: null,
+    message: "successfully added service teams",
+    code: 200,
+  };
+}
+
+export async function deletedServiceTeams(
+  serviceId: string,
+  payload: DeleteServiceTeamsPayload
+): Promise<Result<Service>> {
+  await prisma.sevicesOnTeams.deleteMany({
+    where: {
+      serviceId: serviceId,
+      teamId: {
+        in: payload.map((user) => user.teamId),
+      },
+    },
+  });
+
+  return {
+    data: null,
+    message: "successfully deleted service teams",
+    code: 204,
   };
 }

@@ -8,3 +8,24 @@ export const CreateServiceSchema = z.object({
 });
 
 export type CreateServicePayload = z.infer<typeof CreateServiceSchema>;
+
+export const AddServiceTeamsSchema = z
+  .array(
+    z.object({
+      teamId: z.string()
+    })
+  )
+  .min(1);
+
+export type AddServiceTeamsPayload = z.infer<typeof AddServiceTeamsSchema>;
+
+export const DeleteServiceTeamsSchema = z
+  .array(
+    z.object({
+      teamId: z.string(),
+    })
+  )
+  .min(1);
+
+export type DeleteServiceTeamsPayload = z.infer<typeof DeleteServiceTeamsSchema>;
+
