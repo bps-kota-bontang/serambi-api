@@ -113,8 +113,8 @@ export async function addTeamUsers(
   if (!isAdmin) {
     return {
       data: null,
-      message: "unauthorized",
-      code: 401,
+      message: "user does not have access to add team users",
+      code: 403,
     };
   }
 
@@ -157,8 +157,8 @@ export async function deletedTeamUsers(
   if (!isAdmin) {
     return {
       data: null,
-      message: "unauthorized",
-      code: 401,
+      message: "user does not have access to delete team users",
+      code: 403,
     };
   }
 
@@ -203,8 +203,8 @@ export async function updatedTeamUsers(
   if (!isAdmin) {
     return {
       data: null,
-      message: "unauthorized",
-      code: 401,
+      message: "user does not have access to update team users",
+      code: 403,
     };
   }
 
