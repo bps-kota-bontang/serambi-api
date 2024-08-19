@@ -1,6 +1,8 @@
 import prisma from "@/libs/prisma";
 import { Team } from "@/prisma/generated";
+import { JWT } from "@/types/jwt";
 import { Result } from "@/types/result";
+import { isAdminTeam } from "@/utils/team";
 import {
   AddTeamUsersPayload,
   CreateTeamPayload,
@@ -89,8 +91,33 @@ export async function createTeam(
 
 export async function addTeamUsers(
   teamId: string,
-  payload: AddTeamUsersPayload
+  payload: AddTeamUsersPayload,
+  claims: JWT
 ): Promise<Result<Team>> {
+  const team = await prisma.team.findFirst({
+    select: {
+      users: {
+        select: {
+          userId: true,
+          isAdmin: true,
+        },
+      },
+    },
+    where: {
+      id: teamId,
+    },
+  });
+
+  const isAdmin = isAdminTeam(claims, team);
+
+  if (!isAdmin) {
+    return {
+      data: null,
+      message: "unauthorized",
+      code: 401,
+    };
+  }
+
   await prisma.usersOnTeams.createMany({
     data: payload.map((user) => ({
       teamId: teamId,
@@ -108,8 +135,33 @@ export async function addTeamUsers(
 
 export async function deletedTeamUsers(
   teamId: string,
-  payload: DeleteTeamUsersPayload
+  payload: DeleteTeamUsersPayload,
+  claims: JWT
 ): Promise<Result<Team>> {
+  const team = await prisma.team.findFirst({
+    select: {
+      users: {
+        select: {
+          userId: true,
+          isAdmin: true,
+        },
+      },
+    },
+    where: {
+      id: teamId,
+    },
+  });
+
+  const isAdmin = isAdminTeam(claims, team);
+
+  if (!isAdmin) {
+    return {
+      data: null,
+      message: "unauthorized",
+      code: 401,
+    };
+  }
+
   await prisma.usersOnTeams.deleteMany({
     where: {
       teamId: teamId,
@@ -129,8 +181,33 @@ export async function deletedTeamUsers(
 export async function updatedTeamUsers(
   teamId: string,
   userId: string,
-  payload: UpdateTeamUsersPayload
+  payload: UpdateTeamUsersPayload,
+  claims: JWT
 ): Promise<Result<Team>> {
+  const team = await prisma.team.findFirst({
+    select: {
+      users: {
+        select: {
+          userId: true,
+          isAdmin: true,
+        },
+      },
+    },
+    where: {
+      id: teamId,
+    },
+  });
+
+  const isAdmin = isAdminTeam(claims, team);
+
+  if (!isAdmin) {
+    return {
+      data: null,
+      message: "unauthorized",
+      code: 401,
+    };
+  }
+
   await prisma.usersOnTeams.update({
     where: {
       teamId_userId: {
