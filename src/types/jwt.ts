@@ -6,4 +6,5 @@ export type JWT = {
   iat: number;
   name: string;
   email: string;
+  isSuper: boolean;
 };

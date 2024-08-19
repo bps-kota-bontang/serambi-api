@@ -21,6 +21,7 @@ model User {
   nip       String         @unique @db.Char(18)
   email     String         @unique
   password  String
+  isSuper   Boolean        @default(false)
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
   teams     UsersOnTeams[]

@@ -11,6 +11,7 @@ export async function getUsers(): Promise<
       name: true,
       nip: true,
       email: true,
+      isSuper: true,
       teams: {
         select: {
           team: {
@@ -41,6 +42,7 @@ export async function getUser(
       name: true,
       nip: true,
       email: true,
+      isSuper: true,
       teams: {
         select: {
           team: {

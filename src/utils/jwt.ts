@@ -22,6 +22,7 @@ export const generatePayload = (user: User) => {
     iat: now,
     name: user.name,
     email: user.email,
+    isSuper: user.isSuper
   };
 
   return payload;
