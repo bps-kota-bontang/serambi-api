@@ -74,8 +74,17 @@ export async function getTeam(teamId: string): Promise<Result<Team>> {
 }
 
 export async function createTeam(
-  payload: CreateTeamPayload
+  payload: CreateTeamPayload,
+  claims: JWT
 ): Promise<Result<Team>> {
+  if (!claims.isSuper) {
+    return {
+      data: null,
+      message: "user does not have access to create team",
+      code: 403,
+    };
+  }
+  
   const team = await prisma.team.create({
     data: {
       name: payload.name,

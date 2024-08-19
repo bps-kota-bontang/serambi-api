@@ -45,9 +45,10 @@ app.get("/:id", async (c) => {
 });
 
 app.post("/", validateRequest("json", CreateTeamSchema), async (c) => {
+  const claims = c.get("jwtPayload") as JWT;
   const validated = c.req.valid("json");
 
-  const result = await createTeam(validated);
+  const result = await createTeam(validated, claims);
 
   return c.json(
     {
