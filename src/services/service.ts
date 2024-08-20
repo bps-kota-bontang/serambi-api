@@ -1,10 +1,45 @@
 import prisma from "@/libs/prisma";
 import { Service } from "@/prisma/generated";
+import { JWT } from "@/types/jwt";
 import { Result } from "@/types/result";
-import { AddServiceTeamsPayload, CreateServicePayload, DeleteServiceTeamsPayload } from "@/validations/service";
+import {
+  AddServiceTeamsPayload,
+  CreateServicePayload,
+  DeleteServiceTeamsPayload,
+} from "@/validations/service";
 
-export async function getServices(): Promise<Result<Service[]>> {
+export async function getServices(claims: JWT): Promise<Result<Service[]>> {
+  const user = await prisma.user.findFirst({
+    select: {
+      teams: {
+        select: {
+          teamId: true,
+        },
+      },
+    },
+    where: { id: claims.sub },
+  });
+
+  if (!user) {
+    return {
+      data: null,
+      message: "user not found",
+      code: 404,
+    };
+  }
+
+  const teamIds = user.teams.map((team) => team.teamId);
+
   const services = await prisma.service.findMany({
+    where: {
+      teams: {
+        some: {
+          teamId: {
+            in: teamIds,
+          },
+        },
+      },
+    },
     include: {
       teams: {
         select: {
@@ -26,7 +61,31 @@ export async function getServices(): Promise<Result<Service[]>> {
   };
 }
 
-export async function getService(serviceId: string): Promise<Result<Service>> {
+export async function getService(
+  serviceId: string,
+  claims: JWT
+): Promise<Result<Service>> {
+  const user = await prisma.user.findFirst({
+    select: {
+      teams: {
+        select: {
+          teamId: true,
+        },
+      },
+    },
+    where: { id: claims.sub },
+  });
+
+  if (!user) {
+    return {
+      data: null,
+      message: "user not found",
+      code: 404,
+    };
+  }
+
+  const teamIds = user.teams.map((team) => team.teamId);
+
   const service = await prisma.service.findFirst({
     include: {
       teams: {
@@ -50,6 +109,18 @@ export async function getService(serviceId: string): Promise<Result<Service>> {
       data: null,
       message: "service not found",
       code: 404,
+    };
+  }
+
+  const hasAccess = service.teams.some((item) =>
+    teamIds.includes(item.team.id)
+  );
+
+  if (!hasAccess) {
+    return {
+      data: null,
+      message: "user does not have access to this service",
+      code: 403,
     };
   }
 
@@ -81,12 +152,44 @@ export async function createService(
 
 export async function addServiceTeams(
   serviceId: string,
-  payload: AddServiceTeamsPayload
+  payload: AddServiceTeamsPayload,
+  claims: JWT
 ): Promise<Result<Service>> {
+  const user = await prisma.user.findFirst({
+    select: {
+      teams: {
+        select: {
+          teamId: true,
+        },
+      },
+    },
+    where: { id: claims.sub },
+  });
+
+  if (!user) {
+    return {
+      data: null,
+      message: "user not found",
+      code: 404,
+    };
+  }
+
+  const teamIds = user.teams.map((item) => item.teamId);
+
+  const hasAccess = payload.every((item) => teamIds.includes(item.teamId));
+
+  if (!hasAccess) {
+    return {
+      data: null,
+      message: "user does not have access to this service",
+      code: 403,
+    };
+  }
+
   await prisma.sevicesOnTeams.createMany({
-    data: payload.map((user) => ({
+    data: payload.map((team) => ({
       serviceId: serviceId,
-      teamId: user.teamId
+      teamId: team.teamId,
     })),
   });
 
@@ -99,13 +202,45 @@ export async function addServiceTeams(
 
 export async function deletedServiceTeams(
   serviceId: string,
-  payload: DeleteServiceTeamsPayload
+  payload: DeleteServiceTeamsPayload,
+  claims: JWT
 ): Promise<Result<Service>> {
+  const user = await prisma.user.findFirst({
+    select: {
+      teams: {
+        select: {
+          teamId: true,
+        },
+      },
+    },
+    where: { id: claims.sub },
+  });
+
+  if (!user) {
+    return {
+      data: null,
+      message: "user not found",
+      code: 404,
+    };
+  }
+
+  const teamIds = user.teams.map((item) => item.teamId);
+
+  const hasAccess = payload.every((item) => teamIds.includes(item.teamId));
+
+  if (!hasAccess) {
+    return {
+      data: null,
+      message: "user does not have access to this service",
+      code: 403,
+    };
+  }
+
   await prisma.sevicesOnTeams.deleteMany({
     where: {
       serviceId: serviceId,
       teamId: {
-        in: payload.map((user) => user.teamId),
+        in: payload.map((team) => team.teamId),
       },
     },
   });
