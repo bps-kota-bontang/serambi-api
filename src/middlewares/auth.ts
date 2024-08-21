@@ -1,6 +1,6 @@
 import { jwt } from "hono/jwt";
 import { createMiddleware } from "hono/factory";
-import { JWT_SECRET } from "@/configs/constant";
+import { COOKIE_SECRET, JWT_SECRET } from "@/configs/constant";
 import { publicRoutes } from "@/configs/routes";
 
 export const auth = createMiddleware(async (c, next) => {
@@ -14,6 +14,10 @@ export const auth = createMiddleware(async (c, next) => {
 
   const jwtMiddleware = jwt({
     secret: JWT_SECRET,
+    cookie: {
+      "key": "token",
+      "secret" : COOKIE_SECRET,
+    }
   });
 
   return jwtMiddleware(c, next);
