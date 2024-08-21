@@ -1,3 +1,4 @@
+import { APP_URL } from "@/configs/constant";
 import {
   addServiceTeams,
   createService,
@@ -6,6 +7,7 @@ import {
   getServices,
 } from "@/services/service";
 import { JWT } from "@/types/jwt";
+import { generateFileName, getFileExtension } from "@/utils/file";
 import { validateRequest } from "@/utils/validation";
 import {
   AddServiceTeamsSchema,
@@ -43,6 +45,24 @@ app.get("/:id", async (c) => {
     },
     result.code
   );
+});
+
+app.post("/upload", async (c) => {
+  const { image } = await c.req.parseBody();
+
+  if (image instanceof File) {
+    const extension = getFileExtension(image);
+    const fileName = generateFileName(extension);
+    const path = `uploads/${fileName}`;
+    await Bun.write(path, image);
+
+    return c.json({
+      data: {
+        imageUrl: `${APP_URL}/${path}`,
+      },
+      message: "Success",
+    });
+  }
 });
 
 app.post("/", validateRequest("json", CreateServiceSchema), async (c) => {

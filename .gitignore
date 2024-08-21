@@ -1,6 +1,11 @@
 # deps
 node_modules/
+
+# envrionments
 .env
 .env.development
 .env.production
 .env.staging
+
+# uploads
+uploads/

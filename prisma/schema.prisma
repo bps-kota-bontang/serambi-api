@@ -57,6 +57,7 @@ model Service {
   id          String           @id @default(cuid())
   name        String
   description String           @db.Text
+  imageUrl     String?
   link        String
   tags        String[]
   createdAt   DateTime         @default(now())

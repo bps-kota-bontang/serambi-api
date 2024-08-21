@@ -138,6 +138,7 @@ export async function createService(
     data: {
       name: payload.name,
       description: payload.description,
+      imageUrl: payload.imageUrl,
       link: payload.link,
       tags: payload.tags,
     },

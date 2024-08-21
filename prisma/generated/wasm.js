@@ -149,6 +149,7 @@ exports.Prisma.ServiceScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  imageUrl: 'imageUrl',
   link: 'link',
   tags: 'tags',
   createdAt: 'createdAt',
@@ -170,6 +171,11 @@ exports.Prisma.SortOrder = {
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 
 
