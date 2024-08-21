@@ -4,11 +4,12 @@ import { cors } from "hono/cors";
 import { prettyJSON } from "hono/pretty-json";
 import v1 from "@/api/v1";
 import { auth } from "@/middlewares/auth";
+import { corsOptions } from "@/configs/cors";
 
 const app = new Hono();
 
 app.use(prettyJSON());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(logger());
 app.use("/v1/*", auth);
 app.route("/v1", v1);
