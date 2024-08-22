@@ -6,9 +6,13 @@ import {
   AddServiceTeamsPayload,
   CreateServicePayload,
   DeleteServiceTeamsPayload,
+  GetServicePayload,
 } from "@/validations/service";
 
-export async function getServices(claims: JWT): Promise<Result<Service[]>> {
+export async function getServices(
+  payload: GetServicePayload,
+  claims: JWT
+): Promise<Result<Service[]>> {
   const user = await prisma.user.findFirst({
     select: {
       teams: {
@@ -30,6 +34,12 @@ export async function getServices(claims: JWT): Promise<Result<Service[]>> {
 
   const teamIds = user.teams.map((team) => team.teamId);
 
+  const page = parseInt(payload.page || "1") || 1;
+  const limit = parseInt(payload.limit || "15") || 15;
+  const offset = (page - 1) * limit;
+  const tags = payload.tags ? payload.tags.split(",") : undefined;
+  const keyword = payload.keyword;
+
   const services = await prisma.service.findMany({
     where: {
       teams: {
@@ -39,6 +49,17 @@ export async function getServices(claims: JWT): Promise<Result<Service[]>> {
           },
         },
       },
+      ...(tags && { tags: { hasSome: tags } }),
+      ...(keyword && {
+        OR: [
+          {
+            name: { contains: keyword, mode: "insensitive" },
+          },
+          {
+            description: { contains: keyword, mode: "insensitive" },
+          },
+        ],
+      }),
     },
     include: {
       teams: {
@@ -52,6 +73,8 @@ export async function getServices(claims: JWT): Promise<Result<Service[]>> {
         },
       },
     },
+    skip: offset,
+    take: limit,
   });
 
   return {

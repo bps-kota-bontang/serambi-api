@@ -13,15 +13,16 @@ import {
   AddServiceTeamsSchema,
   CreateServiceSchema,
   DeleteServiceTeamsSchema,
+  GetServiceSchema,
 } from "@/validations/service";
 import { Hono } from "hono";
 
 const app = new Hono();
 
-app.get("/", async (c) => {
+app.get("/", validateRequest("query", GetServiceSchema), async (c) => {
   const claims = c.get("jwtPayload") as JWT;
-
-  const result = await getServices(claims);
+  const validated = c.req.valid("query");
+  const result = await getServices(validated, claims);
 
   return c.json(
     {
