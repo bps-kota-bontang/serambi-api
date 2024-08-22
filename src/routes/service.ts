@@ -4,6 +4,7 @@ import {
   createService,
   createServiceCredental,
   deletedServiceTeams,
+  deleteService,
   getService,
   getServices,
   getServiceTags,
@@ -26,6 +27,20 @@ app.get("/", validateRequest("query", GetServiceSchema), async (c) => {
   const claims = c.get("jwtPayload") as JWT;
   const validated = c.req.valid("query");
   const result = await getServices(validated, claims);
+
+  return c.json(
+    {
+      data: result.data,
+      message: result.message,
+    },
+    result.code
+  );
+});
+
+app.delete("/:id", async (c) => {
+  const claims = c.get("jwtPayload") as JWT;
+  const serviceId = c.req.param("id");
+  const result = await deleteService(serviceId, claims);
 
   return c.json(
     {

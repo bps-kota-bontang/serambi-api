@@ -42,9 +42,9 @@ model Team {
 
 model UsersOnTeams {
   teamId    String
-  team      Team     @relation(fields: [teamId], references: [id])
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   isAdmin   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -70,9 +70,9 @@ model Service {
 
 model SevicesOnTeams {
   teamId    String
-  team      Team     @relation(fields: [teamId], references: [id])
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   serviceId String
-  service   Service  @relation(fields: [serviceId], references: [id])
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -86,7 +86,7 @@ model Credential {
   password  String?
   hasSso    Boolean @default(false)
   note      String?
-  Service   Service @relation(fields: [serviceId], references: [id])
+  Service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   serviceId String  @unique
 
   @@map("credentials")

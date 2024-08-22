@@ -389,6 +389,72 @@ export async function addServiceTeams(
   };
 }
 
+export async function deleteService(
+  serviceId: string,
+  claims: JWT
+): Promise<Result<Service>> {
+  const user = await prisma.user.findFirst({
+    select: {
+      teams: {
+        select: {
+          teamId: true,
+        },
+      },
+    },
+    where: { id: claims.sub },
+  });
+
+  if (!user) {
+    return {
+      data: null,
+      message: "user not found",
+      code: 404,
+    };
+  }
+
+  const teamIds = user.teams.map((item) => item.teamId);
+
+  const service = await prisma.service.findFirst({
+    where: {
+      id: serviceId,
+    },
+    select: {
+      id: true,
+      teams: true,
+    },
+  });
+
+  if (!service) {
+    return {
+      data: null,
+      message: "service not found",
+      code: 404,
+    };
+  }
+
+  const hasAccess = service.teams.some((item) => teamIds.includes(item.teamId));
+
+  if (!hasAccess) {
+    return {
+      data: null,
+      message: "user does not have access to this service",
+      code: 403,
+    };
+  }
+
+  await prisma.service.delete({
+    where: {
+      id: serviceId,
+    },
+  });
+
+  return {
+    data: null,
+    message: "successfully deleted service teams",
+    code: 204,
+  };
+}
+
 export async function deletedServiceTeams(
   serviceId: string,
   payload: DeleteServiceTeamsPayload,
