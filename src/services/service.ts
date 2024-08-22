@@ -3,7 +3,7 @@ import prisma from "@/libs/prisma";
 import { Service } from "@/prisma/generated";
 import { JWT } from "@/types/jwt";
 import { Result } from "@/types/result";
-import { encrypt } from "@/utils/crypto";
+import { decrypt, encrypt } from "@/utils/crypto";
 import { CreateCredentialPayload } from "@/validations/credential";
 import {
   AddServiceTeamsPayload,
@@ -98,7 +98,11 @@ export async function getServices(
           },
         },
       },
-      credential: true,
+      credential: {
+        select: {
+          id: true,
+        },
+      },
     },
     skip: offset,
     take: limit,
@@ -206,6 +210,7 @@ export async function getService(
           },
         },
       },
+      credential: true,
     },
     where: {
       id: serviceId,
@@ -230,6 +235,32 @@ export async function getService(
       message: "user does not have access to this service",
       code: 403,
     };
+  }
+
+  if (service.credential) {
+    if (service.credential.username) {
+      const usernameEncrypted = JSON.parse(service.credential.username);
+
+      const username = decrypt(
+        usernameEncrypted.encrypted,
+        usernameEncrypted.iv,
+        CRYPTO_KEY
+      );
+
+      service.credential.username = username;
+    }
+
+    if (service.credential.password) {
+      const passwordEncrypted = JSON.parse(service.credential.password);
+
+      const password = decrypt(
+        passwordEncrypted.encrypted,
+        passwordEncrypted.iv,
+        CRYPTO_KEY
+      );
+
+      service.credential.password = password;
+    }
   }
 
   return {
