@@ -12,7 +12,7 @@ import {
 export async function getServices(
   payload: GetServicePayload,
   claims: JWT
-): Promise<Result<Service[]>> {
+): Promise<Result<{ services: Service[]; total: number }>> {
   const user = await prisma.user.findFirst({
     select: {
       teams: {
@@ -39,6 +39,29 @@ export async function getServices(
   const offset = (page - 1) * limit;
   const tags = payload.tags ? payload.tags.split(",") : undefined;
   const keyword = payload.keyword;
+
+  const total = await prisma.service.count({
+    where: {
+      teams: {
+        some: {
+          teamId: {
+            in: teamIds,
+          },
+        },
+      },
+      ...(tags && { tags: { hasSome: tags } }),
+      ...(keyword && {
+        OR: [
+          {
+            name: { contains: keyword, mode: "insensitive" },
+          },
+          {
+            description: { contains: keyword, mode: "insensitive" },
+          },
+        ],
+      }),
+    },
+  });
 
   const services = await prisma.service.findMany({
     where: {
@@ -78,7 +101,7 @@ export async function getServices(
   });
 
   return {
-    data: services,
+    data: { services, total },
     message: "successfully retrieved services",
     code: 200,
   };
