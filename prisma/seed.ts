@@ -18,6 +18,7 @@ const populateUser = async () => {
       nip: "111111111111111111",
       email: "user@mail.com",
       password: "123456",
+      isSuper: true
     },
   ];
 
