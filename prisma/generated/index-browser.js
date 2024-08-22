@@ -163,6 +163,14 @@ exports.Prisma.SevicesOnTeamsScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CredentialScalarFieldEnum = {
+  id: 'id',
+  username: 'username',
+  password: 'password',
+  isSso: 'isSso',
+  serviceId: 'serviceId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -184,7 +192,8 @@ exports.Prisma.ModelName = {
   Team: 'Team',
   UsersOnTeams: 'UsersOnTeams',
   Service: 'Service',
-  SevicesOnTeams: 'SevicesOnTeams'
+  SevicesOnTeams: 'SevicesOnTeams',
+  Credential: 'Credential'
 };
 
 /**
