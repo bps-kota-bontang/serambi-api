@@ -5,6 +5,7 @@ import {
   deletedServiceTeams,
   getService,
   getServices,
+  getServiceTags,
 } from "@/services/service";
 import { JWT } from "@/types/jwt";
 import { generateFileName, getFileExtension } from "@/utils/file";
@@ -23,6 +24,19 @@ app.get("/", validateRequest("query", GetServiceSchema), async (c) => {
   const claims = c.get("jwtPayload") as JWT;
   const validated = c.req.valid("query");
   const result = await getServices(validated, claims);
+
+  return c.json(
+    {
+      data: result.data,
+      message: result.message,
+    },
+    result.code
+  );
+});
+
+app.get("/tags", async (c) => {
+  const claims = c.get("jwtPayload") as JWT;
+  const result = await getServiceTags(claims);
 
   return c.json(
     {

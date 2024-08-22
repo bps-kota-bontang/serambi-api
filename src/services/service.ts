@@ -84,6 +84,59 @@ export async function getServices(
   };
 }
 
+export async function getServiceTags(
+  claims: JWT
+): Promise<Result<Pick<Service, "tags">>> {
+  const user = await prisma.user.findFirst({
+    select: {
+      teams: {
+        select: {
+          teamId: true,
+        },
+      },
+    },
+    where: { id: claims.sub },
+  });
+
+  if (!user) {
+    return {
+      data: null,
+      message: "user not found",
+      code: 404,
+    };
+  }
+
+  const teamIds = user.teams.map((team) => team.teamId);
+
+  const serviceTags = await prisma.service.findMany({
+    distinct: ["tags"],
+    select: {
+      tags: true,
+    },
+    where: {
+      teams: {
+        some: {
+          teamId: {
+            in: teamIds,
+          },
+        },
+      },
+    },
+  });
+
+  const mergedTags = Array.from(
+    new Set(serviceTags.flatMap((tag: any) => tag.tags))
+  ) as string[];
+
+  const result = { tags: mergedTags };
+
+  return {
+    data: result,
+    message: "successfully retrieved service tags",
+    code: 200,
+  };
+}
+
 export async function getService(
   serviceId: string,
   claims: JWT
