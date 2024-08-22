@@ -95,7 +95,7 @@ export async function getServices(
           },
         },
       },
-      credentials: true,
+      credential: true,
     },
     skip: offset,
     take: limit,

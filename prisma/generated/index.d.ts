@@ -4477,7 +4477,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     teams?: boolean | Service$teamsArgs<ExtArgs>
-    credentials?: boolean | Service$credentialsArgs<ExtArgs>
+    credential?: boolean | Service$credentialArgs<ExtArgs>
     _count?: boolean | ServiceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["service"]>
 
@@ -4505,7 +4505,7 @@ export namespace Prisma {
 
   export type ServiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     teams?: boolean | Service$teamsArgs<ExtArgs>
-    credentials?: boolean | Service$credentialsArgs<ExtArgs>
+    credential?: boolean | Service$credentialArgs<ExtArgs>
     _count?: boolean | ServiceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ServiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4514,7 +4514,7 @@ export namespace Prisma {
     name: "Service"
     objects: {
       teams: Prisma.$SevicesOnTeamsPayload<ExtArgs>[]
-      credentials: Prisma.$CredentialPayload<ExtArgs> | null
+      credential: Prisma.$CredentialPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4890,7 +4890,7 @@ export namespace Prisma {
   export interface Prisma__ServiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     teams<T extends Service$teamsArgs<ExtArgs> = {}>(args?: Subset<T, Service$teamsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SevicesOnTeamsPayload<ExtArgs>, T, "findMany"> | Null>
-    credentials<T extends Service$credentialsArgs<ExtArgs> = {}>(args?: Subset<T, Service$credentialsArgs<ExtArgs>>): Prisma__CredentialClient<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    credential<T extends Service$credentialArgs<ExtArgs> = {}>(args?: Subset<T, Service$credentialArgs<ExtArgs>>): Prisma__CredentialClient<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5262,9 +5262,9 @@ export namespace Prisma {
   }
 
   /**
-   * Service.credentials
+   * Service.credential
    */
-  export type Service$credentialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Service$credentialArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Credential
      */
@@ -7511,7 +7511,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Service"> | Date | string
     updatedAt?: DateTimeFilter<"Service"> | Date | string
     teams?: SevicesOnTeamsListRelationFilter
-    credentials?: XOR<CredentialNullableRelationFilter, CredentialWhereInput> | null
+    credential?: XOR<CredentialNullableRelationFilter, CredentialWhereInput> | null
   }
 
   export type ServiceOrderByWithRelationInput = {
@@ -7524,7 +7524,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     teams?: SevicesOnTeamsOrderByRelationAggregateInput
-    credentials?: CredentialOrderByWithRelationInput
+    credential?: CredentialOrderByWithRelationInput
   }
 
   export type ServiceWhereUniqueInput = Prisma.AtLeast<{
@@ -7540,7 +7540,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Service"> | Date | string
     updatedAt?: DateTimeFilter<"Service"> | Date | string
     teams?: SevicesOnTeamsListRelationFilter
-    credentials?: XOR<CredentialNullableRelationFilter, CredentialWhereInput> | null
+    credential?: XOR<CredentialNullableRelationFilter, CredentialWhereInput> | null
   }, "id">
 
   export type ServiceOrderByWithAggregationInput = {
@@ -7882,7 +7882,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     teams?: SevicesOnTeamsCreateNestedManyWithoutServiceInput
-    credentials?: CredentialCreateNestedOneWithoutServiceInput
+    credential?: CredentialCreateNestedOneWithoutServiceInput
   }
 
   export type ServiceUncheckedCreateInput = {
@@ -7895,7 +7895,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     teams?: SevicesOnTeamsUncheckedCreateNestedManyWithoutServiceInput
-    credentials?: CredentialUncheckedCreateNestedOneWithoutServiceInput
+    credential?: CredentialUncheckedCreateNestedOneWithoutServiceInput
   }
 
   export type ServiceUpdateInput = {
@@ -7908,7 +7908,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teams?: SevicesOnTeamsUpdateManyWithoutServiceNestedInput
-    credentials?: CredentialUpdateOneWithoutServiceNestedInput
+    credential?: CredentialUpdateOneWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateInput = {
@@ -7921,7 +7921,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teams?: SevicesOnTeamsUncheckedUpdateManyWithoutServiceNestedInput
-    credentials?: CredentialUncheckedUpdateOneWithoutServiceNestedInput
+    credential?: CredentialUncheckedUpdateOneWithoutServiceNestedInput
   }
 
   export type ServiceCreateManyInput = {
@@ -8009,7 +8009,7 @@ export namespace Prisma {
     username?: string | null
     password?: string | null
     isSso: boolean
-    Service: ServiceCreateNestedOneWithoutCredentialsInput
+    Service: ServiceCreateNestedOneWithoutCredentialInput
   }
 
   export type CredentialUncheckedCreateInput = {
@@ -8025,7 +8025,7 @@ export namespace Prisma {
     username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isSso?: BoolFieldUpdateOperationsInput | boolean
-    Service?: ServiceUpdateOneRequiredWithoutCredentialsNestedInput
+    Service?: ServiceUpdateOneRequiredWithoutCredentialNestedInput
   }
 
   export type CredentialUncheckedUpdateInput = {
@@ -8661,18 +8661,18 @@ export namespace Prisma {
     update?: XOR<XOR<ServiceUpdateToOneWithWhereWithoutTeamsInput, ServiceUpdateWithoutTeamsInput>, ServiceUncheckedUpdateWithoutTeamsInput>
   }
 
-  export type ServiceCreateNestedOneWithoutCredentialsInput = {
-    create?: XOR<ServiceCreateWithoutCredentialsInput, ServiceUncheckedCreateWithoutCredentialsInput>
-    connectOrCreate?: ServiceCreateOrConnectWithoutCredentialsInput
+  export type ServiceCreateNestedOneWithoutCredentialInput = {
+    create?: XOR<ServiceCreateWithoutCredentialInput, ServiceUncheckedCreateWithoutCredentialInput>
+    connectOrCreate?: ServiceCreateOrConnectWithoutCredentialInput
     connect?: ServiceWhereUniqueInput
   }
 
-  export type ServiceUpdateOneRequiredWithoutCredentialsNestedInput = {
-    create?: XOR<ServiceCreateWithoutCredentialsInput, ServiceUncheckedCreateWithoutCredentialsInput>
-    connectOrCreate?: ServiceCreateOrConnectWithoutCredentialsInput
-    upsert?: ServiceUpsertWithoutCredentialsInput
+  export type ServiceUpdateOneRequiredWithoutCredentialNestedInput = {
+    create?: XOR<ServiceCreateWithoutCredentialInput, ServiceUncheckedCreateWithoutCredentialInput>
+    connectOrCreate?: ServiceCreateOrConnectWithoutCredentialInput
+    upsert?: ServiceUpsertWithoutCredentialInput
     connect?: ServiceWhereUniqueInput
-    update?: XOR<XOR<ServiceUpdateToOneWithWhereWithoutCredentialsInput, ServiceUpdateWithoutCredentialsInput>, ServiceUncheckedUpdateWithoutCredentialsInput>
+    update?: XOR<XOR<ServiceUpdateToOneWithWhereWithoutCredentialInput, ServiceUpdateWithoutCredentialInput>, ServiceUncheckedUpdateWithoutCredentialInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -9156,7 +9156,7 @@ export namespace Prisma {
     tags?: ServiceCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
-    credentials?: CredentialCreateNestedOneWithoutServiceInput
+    credential?: CredentialCreateNestedOneWithoutServiceInput
   }
 
   export type ServiceUncheckedCreateWithoutTeamsInput = {
@@ -9168,7 +9168,7 @@ export namespace Prisma {
     tags?: ServiceCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
-    credentials?: CredentialUncheckedCreateNestedOneWithoutServiceInput
+    credential?: CredentialUncheckedCreateNestedOneWithoutServiceInput
   }
 
   export type ServiceCreateOrConnectWithoutTeamsInput = {
@@ -9223,7 +9223,7 @@ export namespace Prisma {
     tags?: ServiceUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    credentials?: CredentialUpdateOneWithoutServiceNestedInput
+    credential?: CredentialUpdateOneWithoutServiceNestedInput
   }
 
   export type ServiceUncheckedUpdateWithoutTeamsInput = {
@@ -9235,10 +9235,10 @@ export namespace Prisma {
     tags?: ServiceUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    credentials?: CredentialUncheckedUpdateOneWithoutServiceNestedInput
+    credential?: CredentialUncheckedUpdateOneWithoutServiceNestedInput
   }
 
-  export type ServiceCreateWithoutCredentialsInput = {
+  export type ServiceCreateWithoutCredentialInput = {
     id?: string
     name: string
     description: string
@@ -9250,7 +9250,7 @@ export namespace Prisma {
     teams?: SevicesOnTeamsCreateNestedManyWithoutServiceInput
   }
 
-  export type ServiceUncheckedCreateWithoutCredentialsInput = {
+  export type ServiceUncheckedCreateWithoutCredentialInput = {
     id?: string
     name: string
     description: string
@@ -9262,23 +9262,23 @@ export namespace Prisma {
     teams?: SevicesOnTeamsUncheckedCreateNestedManyWithoutServiceInput
   }
 
-  export type ServiceCreateOrConnectWithoutCredentialsInput = {
+  export type ServiceCreateOrConnectWithoutCredentialInput = {
     where: ServiceWhereUniqueInput
-    create: XOR<ServiceCreateWithoutCredentialsInput, ServiceUncheckedCreateWithoutCredentialsInput>
+    create: XOR<ServiceCreateWithoutCredentialInput, ServiceUncheckedCreateWithoutCredentialInput>
   }
 
-  export type ServiceUpsertWithoutCredentialsInput = {
-    update: XOR<ServiceUpdateWithoutCredentialsInput, ServiceUncheckedUpdateWithoutCredentialsInput>
-    create: XOR<ServiceCreateWithoutCredentialsInput, ServiceUncheckedCreateWithoutCredentialsInput>
+  export type ServiceUpsertWithoutCredentialInput = {
+    update: XOR<ServiceUpdateWithoutCredentialInput, ServiceUncheckedUpdateWithoutCredentialInput>
+    create: XOR<ServiceCreateWithoutCredentialInput, ServiceUncheckedCreateWithoutCredentialInput>
     where?: ServiceWhereInput
   }
 
-  export type ServiceUpdateToOneWithWhereWithoutCredentialsInput = {
+  export type ServiceUpdateToOneWithWhereWithoutCredentialInput = {
     where?: ServiceWhereInput
-    data: XOR<ServiceUpdateWithoutCredentialsInput, ServiceUncheckedUpdateWithoutCredentialsInput>
+    data: XOR<ServiceUpdateWithoutCredentialInput, ServiceUncheckedUpdateWithoutCredentialInput>
   }
 
-  export type ServiceUpdateWithoutCredentialsInput = {
+  export type ServiceUpdateWithoutCredentialInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -9290,7 +9290,7 @@ export namespace Prisma {
     teams?: SevicesOnTeamsUpdateManyWithoutServiceNestedInput
   }
 
-  export type ServiceUncheckedUpdateWithoutCredentialsInput = {
+  export type ServiceUncheckedUpdateWithoutCredentialInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
