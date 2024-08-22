@@ -2,6 +2,7 @@ import { APP_URL } from "@/configs/constant";
 import {
   addServiceTeams,
   createService,
+  createServiceCredental,
   deletedServiceTeams,
   getService,
   getServices,
@@ -10,6 +11,7 @@ import {
 import { JWT } from "@/types/jwt";
 import { generateFileName, getFileExtension } from "@/utils/file";
 import { validateRequest } from "@/utils/validation";
+import { CreateCredentialSchema } from "@/validations/credential";
 import {
   AddServiceTeamsSchema,
   CreateServiceSchema,
@@ -39,12 +41,11 @@ app.get("/tags", async (c) => {
   const type = c.req.query("type");
 
   let result;
-  if(type == "all"){
-     result = await getServiceTags();
+  if (type == "all") {
+    result = await getServiceTags();
   } else {
-     result = await getServiceTags(claims);
+    result = await getServiceTags(claims);
   }
- 
 
   return c.json(
     {
@@ -101,6 +102,26 @@ app.post("/", validateRequest("json", CreateServiceSchema), async (c) => {
     result.code
   );
 });
+
+app.post(
+  "/:id/credential",
+  validateRequest("json", CreateCredentialSchema),
+  async (c) => {
+    const claims = c.get("jwtPayload") as JWT;
+    const serviceId = c.req.param("id");
+    const validated = c.req.valid("json");
+
+    const result = await createServiceCredental(serviceId, validated, claims);
+
+    return c.json(
+      {
+        data: result.data,
+        message: result.message,
+      },
+      result.code
+    );
+  }
+);
 
 app.post(
   "/:id/teams",

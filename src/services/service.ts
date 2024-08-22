@@ -1,7 +1,10 @@
+import { CRYPTO_KEY } from "@/configs/constant";
 import prisma from "@/libs/prisma";
 import { Service } from "@/prisma/generated";
 import { JWT } from "@/types/jwt";
 import { Result } from "@/types/result";
+import { encrypt } from "@/utils/crypto";
+import { CreateCredentialPayload } from "@/validations/credential";
 import {
   AddServiceTeamsPayload,
   CreateServicePayload,
@@ -355,5 +358,98 @@ export async function deletedServiceTeams(
     data: null,
     message: "successfully deleted service teams",
     code: 204,
+  };
+}
+
+export async function createServiceCredental(
+  serviceId: string,
+  payload: CreateCredentialPayload,
+  claims: JWT
+): Promise<Result<Service>> {
+  const user = await prisma.user.findFirst({
+    select: {
+      teams: {
+        select: {
+          teamId: true,
+        },
+      },
+    },
+    where: { id: claims.sub },
+  });
+
+  if (!user) {
+    return {
+      data: null,
+      message: "user not found",
+      code: 404,
+    };
+  }
+
+  const teamIds = user.teams.map((item) => item.teamId);
+
+  const service = await prisma.service.findFirst({
+    select: {
+      teams: {
+        select: {
+          teamId: true,
+        },
+      },
+    },
+    where: {
+      id: serviceId,
+    },
+  });
+
+  if (!service) {
+    return {
+      data: null,
+      message: "service not found",
+      code: 404,
+    };
+  }
+
+  const hasAccess = service.teams.some((item) => teamIds.includes(item.teamId));
+
+  if (!hasAccess) {
+    return {
+      data: null,
+      message: "user does not have access to this service",
+      code: 403,
+    };
+  }
+
+  let usernameEncrypted = null;
+  let passwordEncrypted = null;
+
+  if (payload.username) {
+    const encryptedResult = encrypt(payload.username, CRYPTO_KEY);
+    usernameEncrypted = JSON.stringify(encryptedResult);
+  }
+
+  if (payload.password) {
+    const encryptedResult = encrypt(payload.password, CRYPTO_KEY);
+    passwordEncrypted = JSON.stringify(encryptedResult);
+  }
+
+  const serviceUpdated = await prisma.service.update({
+    where: {
+      id: serviceId,
+    },
+    data: {
+      credential: {
+        create: {
+          username: usernameEncrypted,
+          password: passwordEncrypted,
+          hasSso: payload.hasSso,
+          note: payload.note,
+        },
+      },
+    },
+  });
+
+  return {
+    data: serviceUpdated,
+    message: "successfully created service credential",
+    code: 201,
   };
 }

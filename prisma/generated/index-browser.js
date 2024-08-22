@@ -167,7 +167,8 @@ exports.Prisma.CredentialScalarFieldEnum = {
   id: 'id',
   username: 'username',
   password: 'password',
-  isSso: 'isSso',
+  hasSso: 'hasSso',
+  note: 'note',
   serviceId: 'serviceId'
 };
 

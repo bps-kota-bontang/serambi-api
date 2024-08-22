@@ -84,7 +84,8 @@ model Credential {
   id        String  @id @default(cuid())
   username  String?
   password  String?
-  isSso     Boolean
+  hasSso    Boolean @default(false)
+  note      String?
   Service   Service @relation(fields: [serviceId], references: [id])
   serviceId String  @unique
 

@@ -6232,7 +6232,8 @@ export namespace Prisma {
     id: string | null
     username: string | null
     password: string | null
-    isSso: boolean | null
+    hasSso: boolean | null
+    note: string | null
     serviceId: string | null
   }
 
@@ -6240,7 +6241,8 @@ export namespace Prisma {
     id: string | null
     username: string | null
     password: string | null
-    isSso: boolean | null
+    hasSso: boolean | null
+    note: string | null
     serviceId: string | null
   }
 
@@ -6248,7 +6250,8 @@ export namespace Prisma {
     id: number
     username: number
     password: number
-    isSso: number
+    hasSso: number
+    note: number
     serviceId: number
     _all: number
   }
@@ -6258,7 +6261,8 @@ export namespace Prisma {
     id?: true
     username?: true
     password?: true
-    isSso?: true
+    hasSso?: true
+    note?: true
     serviceId?: true
   }
 
@@ -6266,7 +6270,8 @@ export namespace Prisma {
     id?: true
     username?: true
     password?: true
-    isSso?: true
+    hasSso?: true
+    note?: true
     serviceId?: true
   }
 
@@ -6274,7 +6279,8 @@ export namespace Prisma {
     id?: true
     username?: true
     password?: true
-    isSso?: true
+    hasSso?: true
+    note?: true
     serviceId?: true
     _all?: true
   }
@@ -6355,7 +6361,8 @@ export namespace Prisma {
     id: string
     username: string | null
     password: string | null
-    isSso: boolean
+    hasSso: boolean
+    note: string | null
     serviceId: string
     _count: CredentialCountAggregateOutputType | null
     _min: CredentialMinAggregateOutputType | null
@@ -6380,7 +6387,8 @@ export namespace Prisma {
     id?: boolean
     username?: boolean
     password?: boolean
-    isSso?: boolean
+    hasSso?: boolean
+    note?: boolean
     serviceId?: boolean
     Service?: boolean | ServiceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["credential"]>
@@ -6389,7 +6397,8 @@ export namespace Prisma {
     id?: boolean
     username?: boolean
     password?: boolean
-    isSso?: boolean
+    hasSso?: boolean
+    note?: boolean
     serviceId?: boolean
     Service?: boolean | ServiceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["credential"]>
@@ -6398,7 +6407,8 @@ export namespace Prisma {
     id?: boolean
     username?: boolean
     password?: boolean
-    isSso?: boolean
+    hasSso?: boolean
+    note?: boolean
     serviceId?: boolean
   }
 
@@ -6418,7 +6428,8 @@ export namespace Prisma {
       id: string
       username: string | null
       password: string | null
-      isSso: boolean
+      hasSso: boolean
+      note: string | null
       serviceId: string
     }, ExtArgs["result"]["credential"]>
     composites: {}
@@ -6817,7 +6828,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Credential", 'String'>
     readonly username: FieldRef<"Credential", 'String'>
     readonly password: FieldRef<"Credential", 'String'>
-    readonly isSso: FieldRef<"Credential", 'Boolean'>
+    readonly hasSso: FieldRef<"Credential", 'Boolean'>
+    readonly note: FieldRef<"Credential", 'String'>
     readonly serviceId: FieldRef<"Credential", 'String'>
   }
     
@@ -7228,7 +7240,8 @@ export namespace Prisma {
     id: 'id',
     username: 'username',
     password: 'password',
-    isSso: 'isSso',
+    hasSso: 'hasSso',
+    note: 'note',
     serviceId: 'serviceId'
   };
 
@@ -7632,7 +7645,8 @@ export namespace Prisma {
     id?: StringFilter<"Credential"> | string
     username?: StringNullableFilter<"Credential"> | string | null
     password?: StringNullableFilter<"Credential"> | string | null
-    isSso?: BoolFilter<"Credential"> | boolean
+    hasSso?: BoolFilter<"Credential"> | boolean
+    note?: StringNullableFilter<"Credential"> | string | null
     serviceId?: StringFilter<"Credential"> | string
     Service?: XOR<ServiceRelationFilter, ServiceWhereInput>
   }
@@ -7641,7 +7655,8 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
-    isSso?: SortOrder
+    hasSso?: SortOrder
+    note?: SortOrderInput | SortOrder
     serviceId?: SortOrder
     Service?: ServiceOrderByWithRelationInput
   }
@@ -7654,7 +7669,8 @@ export namespace Prisma {
     NOT?: CredentialWhereInput | CredentialWhereInput[]
     username?: StringNullableFilter<"Credential"> | string | null
     password?: StringNullableFilter<"Credential"> | string | null
-    isSso?: BoolFilter<"Credential"> | boolean
+    hasSso?: BoolFilter<"Credential"> | boolean
+    note?: StringNullableFilter<"Credential"> | string | null
     Service?: XOR<ServiceRelationFilter, ServiceWhereInput>
   }, "id" | "serviceId">
 
@@ -7662,7 +7678,8 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
-    isSso?: SortOrder
+    hasSso?: SortOrder
+    note?: SortOrderInput | SortOrder
     serviceId?: SortOrder
     _count?: CredentialCountOrderByAggregateInput
     _max?: CredentialMaxOrderByAggregateInput
@@ -7676,7 +7693,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Credential"> | string
     username?: StringNullableWithAggregatesFilter<"Credential"> | string | null
     password?: StringNullableWithAggregatesFilter<"Credential"> | string | null
-    isSso?: BoolWithAggregatesFilter<"Credential"> | boolean
+    hasSso?: BoolWithAggregatesFilter<"Credential"> | boolean
+    note?: StringNullableWithAggregatesFilter<"Credential"> | string | null
     serviceId?: StringWithAggregatesFilter<"Credential"> | string
   }
 
@@ -8008,7 +8026,8 @@ export namespace Prisma {
     id?: string
     username?: string | null
     password?: string | null
-    isSso: boolean
+    hasSso?: boolean
+    note?: string | null
     Service: ServiceCreateNestedOneWithoutCredentialInput
   }
 
@@ -8016,7 +8035,8 @@ export namespace Prisma {
     id?: string
     username?: string | null
     password?: string | null
-    isSso: boolean
+    hasSso?: boolean
+    note?: string | null
     serviceId: string
   }
 
@@ -8024,7 +8044,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isSso?: BoolFieldUpdateOperationsInput | boolean
+    hasSso?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
     Service?: ServiceUpdateOneRequiredWithoutCredentialNestedInput
   }
 
@@ -8032,7 +8053,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isSso?: BoolFieldUpdateOperationsInput | boolean
+    hasSso?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
     serviceId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -8040,7 +8062,8 @@ export namespace Prisma {
     id?: string
     username?: string | null
     password?: string | null
-    isSso: boolean
+    hasSso?: boolean
+    note?: string | null
     serviceId: string
   }
 
@@ -8048,14 +8071,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isSso?: BoolFieldUpdateOperationsInput | boolean
+    hasSso?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CredentialUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isSso?: BoolFieldUpdateOperationsInput | boolean
+    hasSso?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
     serviceId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -8360,7 +8385,8 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     password?: SortOrder
-    isSso?: SortOrder
+    hasSso?: SortOrder
+    note?: SortOrder
     serviceId?: SortOrder
   }
 
@@ -8368,7 +8394,8 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     password?: SortOrder
-    isSso?: SortOrder
+    hasSso?: SortOrder
+    note?: SortOrder
     serviceId?: SortOrder
   }
 
@@ -8376,7 +8403,8 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     password?: SortOrder
-    isSso?: SortOrder
+    hasSso?: SortOrder
+    note?: SortOrder
     serviceId?: SortOrder
   }
 
@@ -9070,14 +9098,16 @@ export namespace Prisma {
     id?: string
     username?: string | null
     password?: string | null
-    isSso: boolean
+    hasSso?: boolean
+    note?: string | null
   }
 
   export type CredentialUncheckedCreateWithoutServiceInput = {
     id?: string
     username?: string | null
     password?: string | null
-    isSso: boolean
+    hasSso?: boolean
+    note?: string | null
   }
 
   export type CredentialCreateOrConnectWithoutServiceInput = {
@@ -9116,14 +9146,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isSso?: BoolFieldUpdateOperationsInput | boolean
+    hasSso?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CredentialUncheckedUpdateWithoutServiceInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isSso?: BoolFieldUpdateOperationsInput | boolean
+    hasSso?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TeamCreateWithoutServicesInput = {
