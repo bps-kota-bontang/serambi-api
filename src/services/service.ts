@@ -307,6 +307,21 @@ export async function createService(
     };
   }
 
+  let usernameEncrypted = null;
+  let passwordEncrypted = null;
+
+
+  if (payload.credential.username) {
+    const encryptedResult = encrypt(payload.credential.username, CRYPTO_KEY);
+    usernameEncrypted = JSON.stringify(encryptedResult);
+  }
+
+  if (payload.credential.password) {
+    const encryptedResult = encrypt(payload.credential.password, CRYPTO_KEY);
+    passwordEncrypted = JSON.stringify(encryptedResult);
+  }
+
+
   const service = await prisma.service.create({
     data: {
       name: payload.name,
@@ -316,8 +331,8 @@ export async function createService(
       tags: payload.tags,
       credential: {
         create: {
-          username: payload.credential.username,
-          password: payload.credential.password,
+          username: usernameEncrypted,
+          password: passwordEncrypted,
           hasSso: payload.credential.hasSso,
           note: payload.credential.note,
         },
