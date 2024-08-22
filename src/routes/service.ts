@@ -90,9 +90,10 @@ app.post("/upload", async (c) => {
 });
 
 app.post("/", validateRequest("json", CreateServiceSchema), async (c) => {
+  const claims = c.get("jwtPayload") as JWT;
   const validated = c.req.valid("json");
 
-  const result = await createService(validated);
+  const result = await createService(validated, claims);
 
   return c.json(
     {

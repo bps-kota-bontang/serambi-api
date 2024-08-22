@@ -271,8 +271,42 @@ export async function getService(
 }
 
 export async function createService(
-  payload: CreateServicePayload
+  payload: CreateServicePayload,
+  claims: JWT
 ): Promise<Result<Service>> {
+  const user = await prisma.user.findFirst({
+    select: {
+      teams: {
+        select: {
+          teamId: true,
+        },
+      },
+    },
+    where: { id: claims.sub },
+  });
+
+  if (!user) {
+    return {
+      data: null,
+      message: "user not found",
+      code: 404,
+    };
+  }
+
+  const teamIds = user.teams.map((item) => item.teamId);
+
+  const hasAccess = payload.teams.every((item) =>
+    teamIds.includes(item.teamId)
+  );
+
+  if (!hasAccess) {
+    return {
+      data: null,
+      message: "user does not have access to this service",
+      code: 403,
+    };
+  }
+
   const service = await prisma.service.create({
     data: {
       name: payload.name,
@@ -280,7 +314,22 @@ export async function createService(
       imageUrl: payload.imageUrl,
       link: payload.link,
       tags: payload.tags,
+      credential: {
+        create: {
+          username: payload.credential.username,
+          password: payload.credential.password,
+          hasSso: payload.credential.hasSso,
+          note: payload.credential.note,
+        },
+      },
     },
+  });
+
+  await prisma.sevicesOnTeams.createMany({
+    data: payload.teams.map((team) => ({
+      serviceId: service.id,
+      teamId: team.teamId,
+    })),
   });
 
   return {
