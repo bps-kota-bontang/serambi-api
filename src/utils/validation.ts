@@ -10,6 +10,7 @@ export const validateRequest = <T extends keyof ValidationTargets>(
     if (!result.success) {
       return c.json(
         {
+          errors: result.error.issues,
           data: null,
           message: "Invalid payload",
         },
