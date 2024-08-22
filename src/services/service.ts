@@ -109,28 +109,31 @@ export async function getServices(
 }
 
 export async function getServiceTags(
-  claims: JWT
+  claims?: JWT
 ): Promise<Result<Pick<Service, "tags">>> {
-  const user = await prisma.user.findFirst({
-    select: {
-      teams: {
-        select: {
-          teamId: true,
+  let teamIds: string[] = [];
+  if (claims) {
+    const user = await prisma.user.findFirst({
+      select: {
+        teams: {
+          select: {
+            teamId: true,
+          },
         },
       },
-    },
-    where: { id: claims.sub },
-  });
+      where: { id: claims.sub },
+    });
 
-  if (!user) {
-    return {
-      data: null,
-      message: "user not found",
-      code: 404,
-    };
+    if (!user) {
+      return {
+        data: null,
+        message: "user not found",
+        code: 404,
+      };
+    }
+
+    teamIds = user.teams.map((team) => team.teamId);
   }
-
-  const teamIds = user.teams.map((team) => team.teamId);
 
   const serviceTags = await prisma.service.findMany({
     distinct: ["tags"],
@@ -138,13 +141,15 @@ export async function getServiceTags(
       tags: true,
     },
     where: {
-      teams: {
-        some: {
-          teamId: {
-            in: teamIds,
+      ...(teamIds.length > 0 && {
+        teams: {
+          some: {
+            teamId: {
+              in: teamIds,
+            },
           },
         },
-      },
+      }),
     },
   });
 

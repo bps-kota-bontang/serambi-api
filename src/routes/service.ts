@@ -36,7 +36,15 @@ app.get("/", validateRequest("query", GetServiceSchema), async (c) => {
 
 app.get("/tags", async (c) => {
   const claims = c.get("jwtPayload") as JWT;
-  const result = await getServiceTags(claims);
+  const type = c.req.query("type");
+
+  let result;
+  if(type == "all"){
+     result = await getServiceTags();
+  } else {
+     result = await getServiceTags(claims);
+  }
+ 
 
   return c.json(
     {
