@@ -75,18 +75,28 @@ app.post("/upload", async (c) => {
   const { image } = await c.req.parseBody();
 
   if (image instanceof File) {
-    const extension = getFileExtension(image);
-    const fileName = generateFileName(extension);
-    const path = `uploads/${fileName}`;
-    await Bun.write(path, image);
+    if (image.type.startsWith("image/")) {
+      const extension = getFileExtension(image);
+      const fileName = generateFileName(extension);
+      const path = `uploads/${fileName}`;
+      await Bun.write(path, image);
 
-    return c.json({
-      data: {
-        imageUrl: `${APP_URL}/${path}`,
-      },
-      message: "Success",
-    });
+      return c.json({
+        data: {
+          imageUrl: `${APP_URL}/${path}`,
+        },
+        message: "Success",
+      });
+    }
   }
+
+  return c.json(
+    {
+      data: null,
+      message: "Invalid file",
+    },
+    400
+  );
 });
 
 app.post("/", validateRequest("json", CreateServiceSchema), async (c) => {
