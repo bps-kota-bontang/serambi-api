@@ -10,7 +10,31 @@ import {
   UpdateTeamUsersPayload,
 } from "@/validations/team";
 
-export async function getTeams(): Promise<Result<Team[]>> {
+export async function getTeams(claims?: JWT): Promise<Result<Team[]>> {
+  let teamIds: string[] = [];
+  if (claims) {
+    const user = await prisma.user.findFirst({
+      select: {
+        teams: {
+          select: {
+            teamId: true,
+          },
+        },
+      },
+      where: { id: claims.sub },
+    });
+
+    if (!user) {
+      return {
+        data: null,
+        message: "user not found",
+        code: 404,
+      };
+    }
+
+    teamIds = user.teams.map((team) => team.teamId);
+  }
+
   const teams = await prisma.team.findMany({
     include: {
       users: {
@@ -26,6 +50,13 @@ export async function getTeams(): Promise<Result<Team[]>> {
           isAdmin: true,
         },
       },
+    },
+    where: {
+      ...(teamIds.length > 0 && {
+        id: {
+          in: teamIds,
+        },
+      }),
     },
   });
 
@@ -84,7 +115,7 @@ export async function createTeam(
       code: 403,
     };
   }
-  
+
   const team = await prisma.team.create({
     data: {
       name: payload.name,

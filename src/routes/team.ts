@@ -19,7 +19,16 @@ import { Hono } from "hono";
 const app = new Hono();
 
 app.get("/", async (c) => {
-  const result = await getTeams();
+  const claims = c.get("jwtPayload") as JWT;
+  const type = c.req.query("type");
+
+  let result;
+  if (type == "all") {
+    result = await getTeams();
+  } else {
+    result = await getTeams(claims);
+  }
+
 
   return c.json(
     {
