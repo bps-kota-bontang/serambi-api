@@ -7,6 +7,7 @@ import {
   AddTeamUsersPayload,
   CreateTeamPayload,
   DeleteTeamUsersPayload,
+  UpdateTeamUserPayload,
   UpdateTeamUsersPayload,
 } from "@/validations/team";
 
@@ -218,10 +219,10 @@ export async function deletedTeamUsers(
   };
 }
 
-export async function updatedTeamUsers(
+export async function updatedTeamUser(
   teamId: string,
   userId: string,
-  payload: UpdateTeamUsersPayload,
+  payload: UpdateTeamUserPayload,
   claims: JWT
 ): Promise<Result<Team>> {
   const team = await prisma.team.findFirst({
@@ -263,6 +264,59 @@ export async function updatedTeamUsers(
   return {
     data: null,
     message: "successfully updated team users",
+    code: 200,
+  };
+}
+
+export async function updatedTeamUsers(
+  teamId: string,
+  payload: UpdateTeamUsersPayload,
+  claims: JWT
+): Promise<Result<Team>> {
+  const team = await prisma.team.findFirst({
+    select: {
+      users: {
+        select: {
+          userId: true,
+          isAdmin: true,
+        },
+      },
+    },
+    where: {
+      id: teamId,
+    },
+  });
+
+  const isAdmin = isAdminTeam(claims, team);
+
+  if (!isAdmin) {
+    return {
+      data: null,
+      message: "user does not have access to this service",
+      code: 403,
+    };
+  }
+
+  await prisma.usersOnTeams.deleteMany({
+    where: {
+      teamId: teamId,
+    },
+  });
+
+  const data = payload.map((user) => ({
+    teamId: teamId,
+    userId: user.userId,
+  }));
+
+  console.log(data);
+
+  await prisma.usersOnTeams.createMany({
+    data,
+  });
+
+  return {
+    data: null,
+    message: "successfully updated service users",
     code: 200,
   };
 }

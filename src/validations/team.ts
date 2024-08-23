@@ -27,8 +27,18 @@ export const DeleteTeamUsersSchema = z
 
 export type DeleteTeamUsersPayload = z.infer<typeof DeleteTeamUsersSchema>;
 
-export const UpdateTeamUsersSchema = z.object({
+export const UpdateTeamUserSchema = z.object({
   isAdmin: z.boolean(),
 });
+
+export type UpdateTeamUserPayload = z.infer<typeof UpdateTeamUserSchema>;
+
+export const UpdateTeamUsersSchema = z
+  .array(
+    z.object({
+      userId: z.string(),
+    })
+  )
+  .min(1);
 
 export type UpdateTeamUsersPayload = z.infer<typeof UpdateTeamUsersSchema>;
