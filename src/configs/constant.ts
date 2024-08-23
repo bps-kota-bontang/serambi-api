@@ -1,4 +1,8 @@
+export const APP_BUILD_HASH = Bun.env.APP_BUILD_HASH || "local";
+export const APP_ENV = Bun.env.APP_ENV || "development";
+export const APP_NAME = Bun.env.APP_NAME || "Serambi";
 export const APP_URL = Bun.env.APP_URL || "http://localhost:3000";
+export const APP_VERSION = Bun.env.npm_package_version || "0.1.0";
 export const COOKIE_SECRET = Bun.env.COOKIE_SECRET || "password";
 export const CORS_ORIGIN = Bun.env.CORS_ORIGIN || ["http://localhost:5173", "http://localhost:4173"];
 export const CRYPTO_KEY = Bun.env.CRYPTO_KEY || "password";
