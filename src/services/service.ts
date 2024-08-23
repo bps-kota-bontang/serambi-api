@@ -310,7 +310,6 @@ export async function createService(
   let usernameEncrypted = null;
   let passwordEncrypted = null;
 
-
   if (payload.credential.username) {
     const encryptedResult = encrypt(payload.credential.username, CRYPTO_KEY);
     usernameEncrypted = JSON.stringify(encryptedResult);
@@ -320,7 +319,6 @@ export async function createService(
     const encryptedResult = encrypt(payload.credential.password, CRYPTO_KEY);
     passwordEncrypted = JSON.stringify(encryptedResult);
   }
-
 
   const service = await prisma.service.create({
     data: {
@@ -351,6 +349,133 @@ export async function createService(
     data: service,
     message: "successfully created service",
     code: 201,
+  };
+}
+
+export async function updateService(
+  serviceId: string,
+  payload: CreateServicePayload,
+  claims: JWT
+): Promise<Result<Service>> {
+  const user = await prisma.user.findFirst({
+    select: {
+      teams: {
+        select: {
+          teamId: true,
+        },
+      },
+    },
+    where: { id: claims.sub },
+  });
+
+  if (!user) {
+    return {
+      data: null,
+      message: "user not found",
+      code: 404,
+    };
+  }
+
+  const teamIds = user.teams.map((item) => item.teamId);
+
+  const hasAccess = payload.teams.every((item) =>
+    teamIds.includes(item.teamId)
+  );
+
+  if (!hasAccess) {
+    return {
+      data: null,
+      message: "user does not have access to this service",
+      code: 403,
+    };
+  }
+
+  const service = await prisma.service.findFirst({
+    select: {
+      teams: {
+        select: {
+          teamId: true,
+        },
+      },
+    },
+    where: {
+      id: serviceId,
+    },
+  });
+
+  if (!service) {
+    return {
+      data: null,
+      message: "service not found",
+      code: 404,
+    };
+  }
+
+  const hasAuthorzied = service.teams.some((item) =>
+    teamIds.includes(item.teamId)
+  );
+
+  if (!hasAuthorzied) {
+    return {
+      data: null,
+      message: "user does not have access to this service",
+      code: 403,
+    };
+  }
+
+  let usernameEncrypted = null;
+  let passwordEncrypted = null;
+
+  if (payload.credential.username) {
+    const encryptedResult = encrypt(payload.credential.username, CRYPTO_KEY);
+    usernameEncrypted = JSON.stringify(encryptedResult);
+  }
+
+  if (payload.credential.password) {
+    const encryptedResult = encrypt(payload.credential.password, CRYPTO_KEY);
+    passwordEncrypted = JSON.stringify(encryptedResult);
+  }
+
+  const serviceUpdated = await prisma.service.update({
+    where: {
+      id: serviceId,
+    },
+    data: {
+      name: payload.name,
+      description: payload.description,
+      imageUrl: payload.imageUrl,
+      link: payload.link,
+      tags: payload.tags,
+      credential: {
+        update: {
+          data: {
+            username: usernameEncrypted,
+            password: passwordEncrypted,
+            hasSso: payload.credential.hasSso,
+            note: payload.credential.note,
+          },
+        },
+      },
+    },
+  });
+
+  await prisma.sevicesOnTeams.deleteMany({
+    where: {
+      serviceId: serviceId,
+    },
+  });
+
+  await prisma.sevicesOnTeams.createMany({
+    data: payload.teams.map((team) => ({
+      serviceId: serviceId,
+      teamId: team.teamId,
+    })),
+  });
+
+  return {
+    data: serviceUpdated,
+    message: "successfully updated service",
+    code: 200,
   };
 }
 

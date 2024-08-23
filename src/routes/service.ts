@@ -8,6 +8,7 @@ import {
   getService,
   getServices,
   getServiceTags,
+  updateService,
 } from "@/services/service";
 import { JWT } from "@/types/jwt";
 import { generateFileName, getFileExtension } from "@/utils/file";
@@ -119,6 +120,22 @@ app.post("/", validateRequest("json", CreateServiceSchema), async (c) => {
   const validated = c.req.valid("json");
 
   const result = await createService(validated, claims);
+
+  return c.json(
+    {
+      data: result.data,
+      message: result.message,
+    },
+    result.code
+  );
+});
+
+app.put("/:id", validateRequest("json", CreateServiceSchema), async (c) => {
+  const claims = c.get("jwtPayload") as JWT;
+  const validated = c.req.valid("json");
+  const serviceId = c.req.param("id");
+
+  const result = await updateService(serviceId, validated, claims);
 
   return c.json(
     {
