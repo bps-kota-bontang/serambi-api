@@ -189,6 +189,7 @@ export async function getService(
           teamId: true,
         },
       },
+      isSuper: true,
     },
     where: { id: claims.sub },
   });
@@ -230,9 +231,9 @@ export async function getService(
     };
   }
 
-  const hasAccess = service.teams.some((item) =>
-    teamIds.includes(item.team.id)
-  );
+  const hasAccess =
+    service.teams.some((item) => teamIds.includes(item.team.id)) ||
+    user.isSuper;
 
   if (!hasAccess) {
     return {
@@ -286,6 +287,7 @@ export async function createService(
           teamId: true,
         },
       },
+      isSuper: true,
     },
     where: { id: claims.sub },
   });
@@ -300,9 +302,9 @@ export async function createService(
 
   const teamIds = user.teams.map((item) => item.teamId);
 
-  const hasAccess = payload.teams.every((item) =>
-    teamIds.includes(item.teamId)
-  );
+  const hasAccess =
+    payload.teams.every((item) => teamIds.includes(item.teamId)) ||
+    user.isSuper;
 
   if (!hasAccess) {
     return {
@@ -369,6 +371,7 @@ export async function updateService(
           teamId: true,
         },
       },
+      isSuper: true,
     },
     where: { id: claims.sub },
   });
@@ -383,9 +386,9 @@ export async function updateService(
 
   const teamIds = user.teams.map((item) => item.teamId);
 
-  const hasAccess = payload.teams.every((item) =>
-    teamIds.includes(item.teamId)
-  );
+  const hasAccess =
+    payload.teams.every((item) => teamIds.includes(item.teamId)) ||
+    user.isSuper;
 
   if (!hasAccess) {
     return {
@@ -416,9 +419,8 @@ export async function updateService(
     };
   }
 
-  const hasAuthorzied = service.teams.some((item) =>
-    teamIds.includes(item.teamId)
-  );
+  const hasAuthorzied =
+    service.teams.some((item) => teamIds.includes(item.teamId)) || user.isSuper;
 
   if (!hasAuthorzied) {
     return {
@@ -496,6 +498,7 @@ export async function addServiceTeams(
           teamId: true,
         },
       },
+      isSuper: true,
     },
     where: { id: claims.sub },
   });
@@ -510,7 +513,7 @@ export async function addServiceTeams(
 
   const teamIds = user.teams.map((item) => item.teamId);
 
-  const hasAccess = payload.every((item) => teamIds.includes(item.teamId));
+  const hasAccess = payload.every((item) => teamIds.includes(item.teamId)) || user.isSuper;
 
   if (!hasAccess) {
     return {
@@ -578,7 +581,8 @@ export async function deleteService(
     };
   }
 
-  const hasAccess = service.teams.some((item) => teamIds.includes(item.teamId)) || user.isSuper;
+  const hasAccess =
+    service.teams.some((item) => teamIds.includes(item.teamId)) || user.isSuper;
 
   if (!hasAccess) {
     return {
@@ -613,6 +617,7 @@ export async function deletedServiceTeams(
           teamId: true,
         },
       },
+      isSuper: true,
     },
     where: { id: claims.sub },
   });
@@ -627,7 +632,7 @@ export async function deletedServiceTeams(
 
   const teamIds = user.teams.map((item) => item.teamId);
 
-  const hasAccess = payload.every((item) => teamIds.includes(item.teamId));
+  const hasAccess = payload.every((item) => teamIds.includes(item.teamId)) || user.isSuper;
 
   if (!hasAccess) {
     return {
@@ -665,6 +670,7 @@ export async function createServiceCredental(
           teamId: true,
         },
       },
+      isSuper : true
     },
     where: { id: claims.sub },
   });
@@ -700,7 +706,7 @@ export async function createServiceCredental(
     };
   }
 
-  const hasAccess = service.teams.some((item) => teamIds.includes(item.teamId));
+  const hasAccess = service.teams.some((item) => teamIds.includes(item.teamId)) || user.isSuper;
 
   if (!hasAccess) {
     return {
