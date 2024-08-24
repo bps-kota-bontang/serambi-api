@@ -10,6 +10,8 @@ RUN bun install --frozen-lockfile --production
 
 COPY . .
 
+RUN mkdir -p /app/uploads
+
 ARG BUILD_HASH
 ENV APP_BUILD_HASH=${BUILD_HASH}
 
