@@ -454,8 +454,14 @@ export async function updateService(
       link: payload.link,
       tags: payload.tags,
       credential: {
-        update: {
-          data: {
+        upsert: {
+          create: {
+            username: usernameEncrypted,
+            password: passwordEncrypted,
+            hasSso: payload.credential.hasSso,
+            note: payload.credential.note,
+          },
+          update: {
             username: usernameEncrypted,
             password: passwordEncrypted,
             hasSso: payload.credential.hasSso,
@@ -513,7 +519,8 @@ export async function addServiceTeams(
 
   const teamIds = user.teams.map((item) => item.teamId);
 
-  const hasAccess = payload.every((item) => teamIds.includes(item.teamId)) || user.isSuper;
+  const hasAccess =
+    payload.every((item) => teamIds.includes(item.teamId)) || user.isSuper;
 
   if (!hasAccess) {
     return {
@@ -632,7 +639,8 @@ export async function deletedServiceTeams(
 
   const teamIds = user.teams.map((item) => item.teamId);
 
-  const hasAccess = payload.every((item) => teamIds.includes(item.teamId)) || user.isSuper;
+  const hasAccess =
+    payload.every((item) => teamIds.includes(item.teamId)) || user.isSuper;
 
   if (!hasAccess) {
     return {
@@ -670,7 +678,7 @@ export async function createServiceCredental(
           teamId: true,
         },
       },
-      isSuper : true
+      isSuper: true,
     },
     where: { id: claims.sub },
   });
@@ -706,7 +714,8 @@ export async function createServiceCredental(
     };
   }
 
-  const hasAccess = service.teams.some((item) => teamIds.includes(item.teamId)) || user.isSuper;
+  const hasAccess =
+    service.teams.some((item) => teamIds.includes(item.teamId)) || user.isSuper;
 
   if (!hasAccess) {
     return {
