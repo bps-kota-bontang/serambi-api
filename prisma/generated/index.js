@@ -195,6 +195,10 @@ const config = {
       {
         "fromEnvVar": null,
         "value": "linux-musl-arm64-openssl-3.0.x"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "linux-musl-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -202,7 +206,8 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../.env"
   },
   "relativePath": "..",
   "clientVersion": "5.18.0",
@@ -211,6 +216,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -219,8 +225,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"./generated\"\n  binaryTargets = [\"native\", \"linux-arm64-openssl-1.1.x\", \"linux-musl-arm64-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        String         @id @default(cuid())\n  name      String\n  nip       String         @unique @db.Char(18)\n  email     String         @unique\n  password  String\n  isSuper   Boolean        @default(false)\n  createdAt DateTime       @default(now())\n  updatedAt DateTime       @updatedAt\n  teams     UsersOnTeams[]\n\n  @@map(\"users\")\n}\n\nmodel Team {\n  id        String           @id @default(cuid())\n  name      String\n  createdAt DateTime         @default(now())\n  updatedAt DateTime         @updatedAt\n  users     UsersOnTeams[]\n  services  SevicesOnTeams[]\n\n  @@map(\"teams\")\n}\n\nmodel UsersOnTeams {\n  teamId    String\n  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  isAdmin   Boolean  @default(false)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@id([teamId, userId])\n  @@map(\"user_team\")\n}\n\nmodel Service {\n  id          String           @id @default(cuid())\n  name        String\n  description String           @db.Text\n  imageUrl    String?\n  link        String\n  tags        String[]\n  createdAt   DateTime         @default(now())\n  updatedAt   DateTime         @updatedAt\n  teams       SevicesOnTeams[]\n  credential  Credential?\n\n  @@map(\"services\")\n}\n\nmodel SevicesOnTeams {\n  teamId    String\n  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)\n  serviceId String\n  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@id([teamId, serviceId])\n  @@map(\"service_team\")\n}\n\nmodel Credential {\n  id        String  @id @default(cuid())\n  username  String?\n  password  String?\n  hasSso    Boolean @default(false)\n  note      String?\n  Service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)\n  serviceId String  @unique\n\n  @@map(\"credentials\")\n}\n",
-  "inlineSchemaHash": "fd0369446e863fa95bacc9a340a7ce04d091e129f9c43175f5ddd881d2896256",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"./generated\"\n  binaryTargets = [\"native\", \"linux-arm64-openssl-1.1.x\", \"linux-musl-arm64-openssl-3.0.x\", \"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        String         @id @default(cuid())\n  name      String\n  nip       String         @unique @db.Char(18)\n  email     String         @unique\n  password  String\n  isSuper   Boolean        @default(false)\n  createdAt DateTime       @default(now())\n  updatedAt DateTime       @updatedAt\n  teams     UsersOnTeams[]\n\n  @@map(\"users\")\n}\n\nmodel Team {\n  id        String           @id @default(cuid())\n  name      String\n  createdAt DateTime         @default(now())\n  updatedAt DateTime         @updatedAt\n  users     UsersOnTeams[]\n  services  SevicesOnTeams[]\n\n  @@map(\"teams\")\n}\n\nmodel UsersOnTeams {\n  teamId    String\n  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  isAdmin   Boolean  @default(false)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@id([teamId, userId])\n  @@map(\"user_team\")\n}\n\nmodel Service {\n  id          String           @id @default(cuid())\n  name        String\n  description String           @db.Text\n  imageUrl    String?\n  link        String\n  tags        String[]\n  createdAt   DateTime         @default(now())\n  updatedAt   DateTime         @updatedAt\n  teams       SevicesOnTeams[]\n  credential  Credential?\n\n  @@map(\"services\")\n}\n\nmodel SevicesOnTeams {\n  teamId    String\n  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)\n  serviceId String\n  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@id([teamId, serviceId])\n  @@map(\"service_team\")\n}\n\nmodel Credential {\n  id        String  @id @default(cuid())\n  username  String?\n  password  String?\n  hasSso    Boolean @default(false)\n  note      String?\n  Service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)\n  serviceId String  @unique\n\n  @@map(\"credentials\")\n}\n",
+  "inlineSchemaHash": "bf047b2162ad0bd7164bef8ac2bf5f0ddac2e2af4da8e28b7180925f4026db56",
   "copyEngine": true
 }
 
@@ -268,6 +274,10 @@ path.join(process.cwd(), "prisma/generated/libquery_engine-linux-arm64-openssl-1
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-linux-musl-arm64-openssl-3.0.x.so.node");
 path.join(process.cwd(), "prisma/generated/libquery_engine-linux-musl-arm64-openssl-3.0.x.so.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-linux-musl-openssl-3.0.x.so.node");
+path.join(process.cwd(), "prisma/generated/libquery_engine-linux-musl-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "prisma/generated/schema.prisma")
