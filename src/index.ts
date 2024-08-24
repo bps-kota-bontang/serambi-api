@@ -27,6 +27,7 @@ app.get("/", (c) =>
       ` (Version: ${APP_VERSION}, Build: ${APP_BUILD_HASH})`
   )
 );
+app.get("/health", (c) => c.json("OK"));
 
 app.notFound((c) => {
   return c.json(
