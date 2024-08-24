@@ -23,6 +23,7 @@ export async function getServices(
           teamId: true,
         },
       },
+      isSuper: true,
     },
     where: { id: claims.sub },
   });
@@ -45,13 +46,15 @@ export async function getServices(
 
   const total = await prisma.service.count({
     where: {
-      teams: {
-        some: {
-          teamId: {
-            in: teamIds,
+      ...(!user.isSuper && {
+        teams: {
+          some: {
+            teamId: {
+              in: teamIds,
+            },
           },
         },
-      },
+      }),
       ...(tags && { tags: { hasSome: tags } }),
       ...(keyword && {
         OR: [
@@ -68,13 +71,15 @@ export async function getServices(
 
   const services = await prisma.service.findMany({
     where: {
-      teams: {
-        some: {
-          teamId: {
-            in: teamIds,
+      ...(!user.isSuper && {
+        teams: {
+          some: {
+            teamId: {
+              in: teamIds,
+            },
           },
         },
-      },
+      }),
       ...(tags && { tags: { hasSome: tags } }),
       ...(keyword && {
         OR: [
@@ -540,6 +545,7 @@ export async function deleteService(
           teamId: true,
         },
       },
+      isSuper: true,
     },
     where: { id: claims.sub },
   });
@@ -572,7 +578,7 @@ export async function deleteService(
     };
   }
 
-  const hasAccess = service.teams.some((item) => teamIds.includes(item.teamId));
+  const hasAccess = service.teams.some((item) => teamIds.includes(item.teamId)) || user.isSuper;
 
   if (!hasAccess) {
     return {
