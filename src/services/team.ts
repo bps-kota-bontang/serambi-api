@@ -320,3 +320,70 @@ export async function updatedTeamUsers(
     code: 200,
   };
 }
+
+export async function deleteTeam(
+  teamId: string,
+  claims: JWT
+): Promise<Result<null>> {
+  const user = await prisma.user.findFirst({
+    select: {
+      isSuper: true,
+    },
+    where: { id: claims.sub },
+  });
+
+  if (!user) {
+    return {
+      data: null,
+      message: "user not found",
+      code: 404,
+    };
+  }
+
+  const team = await prisma.team.findFirst({
+    where: {
+      id: teamId,
+    },
+    select: {
+      id: true,
+      users: {
+        select: {
+          userId: true,
+          isAdmin: true,
+        },
+      },
+    },
+  });
+
+  if (!team) {
+    return {
+      data: null,
+      message: "team not found",
+      code: 404,
+    };
+  }
+
+  const hasAccess =
+    team.users.some((item) => item.userId === claims.sub && item.isAdmin) ||
+    user.isSuper;
+
+  if (!hasAccess) {
+    return {
+      data: null,
+      message: "user does not have access to this team",
+      code: 403,
+    };
+  }
+
+  await prisma.team.delete({
+    where: {
+      id: teamId,
+    },
+  });
+
+  return {
+    data: null,
+    message: "successfully deleted team",
+    code: 204,
+  };
+}

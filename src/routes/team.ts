@@ -1,5 +1,6 @@
 import {
   createTeam,
+  deleteTeam,
   getTeam,
   getTeams,
   updatedTeamUser,
@@ -105,5 +106,19 @@ app.put(
     );
   }
 );
+
+app.delete("/:id", async (c) => {
+  const claims = c.get("jwtPayload") as JWT;
+  const teamId = c.req.param("id");
+  const result = await deleteTeam(teamId, claims);
+
+  return c.json(
+    {
+      data: result.data,
+      message: result.message,
+    },
+    result.code
+  );
+});
 
 export default app;

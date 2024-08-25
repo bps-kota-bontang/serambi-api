@@ -37,7 +37,7 @@ export const CreateServiceSchema = z.object({
   description: z.string().min(1),
   imageUrl: z.string().nullable(),
   link: z.string().min(1),
-  tags: z.array(z.string()).min(1),
+  tags: z.array(z.string()),
   teams: AddServiceTeamsSchema,
   credential: CreateCredentialSchema
 });

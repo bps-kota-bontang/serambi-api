@@ -1,4 +1,4 @@
-FROM oven/bun:1.1.24-alpine
+FROM oven/bun:1.1.25-slim
 
 WORKDIR /app
 
@@ -7,6 +7,8 @@ COPY package.json bun.lockb ./
 RUN bun install
 
 COPY . .
+
+RUN mkdir -p /app/uploads
 
 ARG BUILD_HASH
 ENV APP_BUILD_HASH=${BUILD_HASH}
