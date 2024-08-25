@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/bps-kota-bontang/serambi-api/compare/v0.1.0...v0.1.1) (2024-08-25)
+
+
+### Bug Fixes
+
+* handle response error based on status ([a02d44f](https://github.com/bps-kota-bontang/serambi-api/commit/a02d44f90e2acce1c50924e1503843edac45a395))
+
 ## 0.1.0 (2024-08-25)
 
 
