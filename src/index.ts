@@ -4,6 +4,7 @@ import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
 import { prettyJSON } from "hono/pretty-json";
+import { HTTPException } from "hono/http-exception";
 import v1 from "@/api/v1";
 import { auth } from "@/middlewares/auth";
 import { corsOptions } from "@/configs/cors";
@@ -43,6 +44,19 @@ app.notFound((c) => {
 });
 
 app.onError((err, c) => {
+  if (err instanceof HTTPException) {
+    const message = err.message;
+    const status = err.getResponse().status as ResponseInit;
+
+    return c.json(
+      {
+        message: message,
+        data: null,
+      },
+      status
+    );
+  }
+
   return c.json(
     {
       message: err.message,
