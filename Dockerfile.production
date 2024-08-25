@@ -15,8 +15,6 @@ RUN mkdir -p /app/uploads
 ARG BUILD_HASH
 ENV APP_BUILD_HASH=${BUILD_HASH}
 
-ENV APP_ENV=production
-
 RUN chown -R bun:bun /app
 
 USER bun
