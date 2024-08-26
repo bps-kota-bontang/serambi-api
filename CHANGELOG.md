@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/bps-kota-bontang/serambi-api/compare/v0.1.1...v0.1.2) (2024-08-26)
+
+
+### Bug Fixes
+
+* correct only super user can update status admin ([9a32928](https://github.com/bps-kota-bontang/serambi-api/commit/9a329280d8058b0726ebb4f25b5ac62bcc0626e3))
+
 ## [0.1.1](https://github.com/bps-kota-bontang/serambi-api/compare/v0.1.0...v0.1.1) (2024-08-25)
 
 
