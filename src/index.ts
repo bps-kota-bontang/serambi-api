@@ -7,6 +7,7 @@ import { prettyJSON } from "hono/pretty-json";
 import { HTTPException } from "hono/http-exception";
 import v1 from "@/api/v1";
 import { auth } from "@/middlewares/auth";
+import { profiling } from "@/middlewares/profiling";
 import { corsOptions } from "@/configs/cors";
 import { csrfOptions } from "@/configs/csrf";
 import {
@@ -24,6 +25,7 @@ app.use(csrf(csrfOptions));
 app.use(logger());
 app.use("/uploads/*", serveStatic({ root: "./" }));
 app.use("/v1/*", auth);
+app.use("/v1/*", profiling);
 app.route("/v1", v1);
 app.get("/", (c) =>
   c.text(
