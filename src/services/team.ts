@@ -225,23 +225,7 @@ export async function updatedTeamUser(
   payload: UpdateTeamUserPayload,
   claims: JWT
 ): Promise<Result<Team>> {
-  const team = await prisma.team.findFirst({
-    select: {
-      users: {
-        select: {
-          userId: true,
-          isAdmin: true,
-        },
-      },
-    },
-    where: {
-      id: teamId,
-    },
-  });
-
-  const isAdmin = isAdminTeam(claims, team);
-
-  if (!isAdmin) {
+  if (!claims.isSuper) {
     return {
       data: null,
       message: "user does not have access to update team users",
