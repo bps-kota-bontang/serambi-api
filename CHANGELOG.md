@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.3](https://github.com/bps-kota-bontang/serambi-api/compare/v0.1.2...v0.1.3) (2024-08-27)
+
+
+### Performance Improvements
+
+* add field hasLogo ([6a1d5d1](https://github.com/bps-kota-bontang/serambi-api/commit/6a1d5d151d8547bc7fbd366a2318be1cae171e8c))
+* configure profiling using sentry ([dbe7df4](https://github.com/bps-kota-bontang/serambi-api/commit/dbe7df4fdc6dd8c12b4d0c56214caaa5021fed54))
+
 ## [0.1.2](https://github.com/bps-kota-bontang/serambi-api/compare/v0.1.1...v0.1.2) (2024-08-26)
 
 
