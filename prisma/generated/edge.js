@@ -176,7 +176,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/arif/BPS/Apps/Serambi/serambi-api/prisma/generated",
+      "value": "/Users/arif/BPS/Apps/Serambi/serambi-api/prisma/generated",
       "fromEnvVar": null
     },
     "config": {
@@ -185,7 +185,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "darwin-arm64",
         "native": true
       },
       {
@@ -206,7 +206,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/arif/BPS/Apps/Serambi/serambi-api/prisma/schema.prisma",
+    "sourceFilePath": "/Users/arif/BPS/Apps/Serambi/serambi-api/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
