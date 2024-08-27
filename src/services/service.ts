@@ -332,6 +332,7 @@ export async function createService(
       name: payload.name,
       description: payload.description,
       imageUrl: payload.imageUrl,
+      hasLogo: payload.hasLogo,
       link: payload.link,
       tags: payload.tags,
       credential: {
@@ -451,6 +452,7 @@ export async function updateService(
       name: payload.name,
       description: payload.description,
       imageUrl: payload.imageUrl,
+      hasLogo: payload.hasLogo,
       link: payload.link,
       tags: payload.tags,
       credential: {

@@ -150,6 +150,7 @@ exports.Prisma.ServiceScalarFieldEnum = {
   name: 'name',
   description: 'description',
   imageUrl: 'imageUrl',
+  hasLogo: 'hasLogo',
   link: 'link',
   tags: 'tags',
   createdAt: 'createdAt',
