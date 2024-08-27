@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/bps-kota-bontang/serambi-api/compare/v0.1.3...v0.1.4) (2024-08-27)
+
+
+### Miscellaneous Chores
+
+* release 0.1.4 ([0ae66dc](https://github.com/bps-kota-bontang/serambi-api/commit/0ae66dce4dd232976182dbd33a3e25220c61a7a0))
+
 ## [0.1.3](https://github.com/bps-kota-bontang/serambi-api/compare/v0.1.2...v0.1.3) (2024-08-27)
 
 
