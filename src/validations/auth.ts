@@ -6,3 +6,10 @@ export const LoginSchema = z.object({
 });
 
 export type LoginPayload = z.infer<typeof LoginSchema>;
+
+export const CallbackAuthSchema = z.object({
+  state: z.string().min(1),
+  token: z.string().min(1),
+});
+
+export type CallbackAuthPayload = z.infer<typeof CallbackAuthSchema>;

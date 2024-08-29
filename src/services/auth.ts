@@ -1,6 +1,7 @@
 import prisma from "@/libs/prisma";
 import { Result } from "@/types/result";
 import { generateToken } from "@/utils/jwt";
+import { getUserInfo } from "@/services/sso";
 
 const login = async (email: string, password: string): Promise<Result<any>> => {
   const user = await prisma.user.findUnique({
@@ -38,4 +39,34 @@ const login = async (email: string, password: string): Promise<Result<any>> => {
   };
 };
 
-export { login };
+const loginSso = async (tokenSso: string): Promise<Result<any>> => {
+  const userSso = await getUserInfo(tokenSso);
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: userSso.email,
+    },
+  });
+
+  if (!user) {
+    if (!user) {
+      return {
+        data: null,
+        message: "User not found",
+        code: 404,
+      };
+    }
+  }
+
+  const token = await generateToken(user);
+
+  return {
+    data: {
+      token: token,
+    },
+    message: "Successfully logged in",
+    code: 200,
+  };
+};
+
+export { login, loginSso };
