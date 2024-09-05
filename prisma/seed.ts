@@ -11,27 +11,30 @@ const prisma = new PrismaClient({
 });
 
 const populateUser = async () => {
-  const users: Omit<User, "createdAt" | "updatedAt">[] = [
+  const users: (Omit<User, "id" | "createdAt" | "updatedAt"> & {
+    id: string | null;
+  })[] = [
     {
-      id: "clzzpk9hy00000cmn1n7k8q3w",
+      id: "cm0pvtbuo00000clc36eg50n6",
       name: "user",
       nip: "111111111111111111",
       email: "user@mail.com",
       password: "123456",
-      isSuper: true
+      isSuper: true,
     },
   ];
 
   for (const user of users) {
+    const { id, password, ...restUser } = user;
     await prisma.user.upsert({
-      where: { id: user.id },
+      where: { id: id ?? "" },
       update: {
-        ...user,
-        password: await Bun.password.hash(user.password),
+        ...restUser,
+        password: await Bun.password.hash(password),
       },
       create: {
-        ...user,
-        password: await Bun.password.hash(user.password),
+        ...restUser,
+        password: await Bun.password.hash(password),
       },
     });
   }
