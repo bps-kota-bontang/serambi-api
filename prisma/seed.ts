@@ -1,5 +1,6 @@
 import { DATABASE_URL, NODE_ENV } from "@/configs/constant";
 import { PrismaClient, User } from "@/prisma/generated";
+import { parse } from "papaparse";
 
 const consoleIterator = console[Symbol.asyncIterator]();
 
@@ -11,23 +12,24 @@ const prisma = new PrismaClient({
 });
 
 const populateUser = async () => {
-  const users: (Omit<User, "id" | "createdAt" | "updatedAt"> & {
-    id: string | null;
-  })[] = [
+  const path = "prisma/data/users.csv";
+  const file = Bun.file(path);
+  const text = await file.text();
+
+  const { data: users } = parse<Omit<User, "id" | "createdAt" | "updatedAt">>(
+    text,
     {
-      id: "cm0pvtbuo00000clc36eg50n6",
-      name: "user",
-      nip: "111111111111111111",
-      email: "user@mail.com",
-      password: "123456",
-      isSuper: true,
-    },
-  ];
+      header: true,
+      skipEmptyLines: true,
+      dynamicTyping: true,
+    }
+  );
 
   for (const user of users) {
-    const { id, password, ...restUser } = user;
+    console.log("Populating user:", user.email);
+    const { password, ...restUser } = user;
     await prisma.user.upsert({
-      where: { id: id ?? "" },
+      where: { email: user.email },
       update: {
         ...restUser,
         password: await Bun.password.hash(password),
