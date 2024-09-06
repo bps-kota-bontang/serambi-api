@@ -30,3 +30,7 @@ export const decrypt = (text: string, ivBase64: string, secretKey: string) => {
 
   return decrypted + decipher.final("utf8");
 };
+
+export const generateState = () => {
+  return randomBytes(16).toString("hex");
+};
