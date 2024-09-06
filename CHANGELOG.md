@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/bps-kota-bontang/serambi-api/compare/v0.1.4...v0.2.0) (2024-09-06)
+
+
+### Features
+
+* integration with Gapura for login with sso ([a6d6a4b](https://github.com/bps-kota-bontang/serambi-api/commit/a6d6a4b94d8d03370ef6bc57ae14899e964ccfd8))
+
+
+### Performance Improvements
+
+* improve seeder using csv ([f6c017f](https://github.com/bps-kota-bontang/serambi-api/commit/f6c017f9173cf0069ea7a5aa6bbd7256d888d09c))
+
 ## [0.1.4](https://github.com/bps-kota-bontang/serambi-api/compare/v0.1.3...v0.1.4) (2024-08-27)
 
 
