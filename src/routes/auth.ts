@@ -2,6 +2,7 @@ import {
   APP_URL,
   CLIENT_URL,
   COOKIE_SECRET,
+  GATE_SERVICE_ID,
   GATE_URL,
   JWT_DURATION,
 } from "@/configs/constant";
@@ -57,7 +58,7 @@ app.get("/sso", async (c) => {
   });
 
   return c.redirect(
-    `${GATE_URL}/api/v1/auth/sso?state=${state}&redirect_url=${APP_URL}/v1/auth/callback`
+    `${GATE_URL}/api/v1/auth/sso?state=${state}&service_id=${GATE_SERVICE_ID}`
   );
 });
 
