@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/bps-kota-bontang/serambi-api/compare/v0.2.0...v0.2.1) (2024-09-29)
+
+
+### Bug Fixes
+
+* :bug: use service_id instead of redirect_url for gate service ([52c14b0](https://github.com/bps-kota-bontang/serambi-api/commit/52c14b0d1fa6916a42ded1478c3185e58ddb8ce0))
+
 ## [0.2.0](https://github.com/bps-kota-bontang/serambi-api/compare/v0.1.4...v0.2.0) (2024-09-06)
 
 
