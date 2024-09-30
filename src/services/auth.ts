@@ -4,9 +4,12 @@ import { generateToken } from "@/utils/jwt";
 import { getUserInfo } from "@/services/sso";
 
 const login = async (email: string, password: string): Promise<Result<any>> => {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
-      email: email,
+      email: {
+        equals: email,
+        mode: "insensitive",
+      },
     },
   });
 
@@ -42,9 +45,12 @@ const login = async (email: string, password: string): Promise<Result<any>> => {
 const loginSso = async (tokenSso: string): Promise<Result<any>> => {
   const userSso = await getUserInfo(tokenSso);
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
-      email: userSso.email,
+      email: {
+        equals: userSso.email,
+        mode: "insensitive",
+      },
     },
   });
 
