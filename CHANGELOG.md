@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/bps-kota-bontang/serambi-api/compare/v0.2.1...v0.2.2) (2024-09-30)
+
+
+### Bug Fixes
+
+* :ambulance: correct get user by email with insensitive ([76f8731](https://github.com/bps-kota-bontang/serambi-api/commit/76f8731d1646800565caecf324e41f31ce707abd))
+
 ## [0.2.1](https://github.com/bps-kota-bontang/serambi-api/compare/v0.2.0...v0.2.1) (2024-09-29)
 
 
