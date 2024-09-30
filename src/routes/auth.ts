@@ -62,6 +62,14 @@ app.get("/sso", async (c) => {
   );
 });
 
+app.get("/logout", async (c) => {
+  const state = await getSignedCookie(c, COOKIE_SECRET, "state");
+
+  return c.redirect(
+    `${GATE_URL}/api/v1/auth/logout?state=${state}&service_id=${GATE_SERVICE_ID}`
+  );
+});
+
 app.get(
   "/callback",
   validateRequest("query", CallbackAuthSchema),
@@ -74,36 +82,34 @@ app.get(
       return c.redirect(CLIENT_URL + "/login?error=invalid_state");
     }
 
-    const result = await loginSso(validated.token);
+    if (validated.action == "logout") {
+      deleteCookie(c, "state");
+      deleteCookie(c, "token");
 
-    if (result.code != 200) {
-      return c.redirect(CLIENT_URL + "/login?error=user_not_found");
+      return c.redirect(CLIENT_URL + "/login");
     }
 
-    await setSignedCookie(c, "token", result.data.token, COOKIE_SECRET, {
-      expires: new Date(Date.now() + JWT_DURATION * 1000),
-      httpOnly: true,
-      maxAge: JWT_DURATION,
-      path: "/",
-      secure: true,
-      sameSite: "Lax",
-    });
+    if (validated.token) {
+      const result = await loginSso(validated.token);
 
-    return c.redirect(CLIENT_URL + "/login");
+      if (result.code != 200) {
+        return c.redirect(CLIENT_URL + "/login?error=user_not_found");
+      }
+
+      await setSignedCookie(c, "token", result.data.token, COOKIE_SECRET, {
+        expires: new Date(Date.now() + JWT_DURATION * 1000),
+        httpOnly: true,
+        maxAge: JWT_DURATION,
+        path: "/",
+        secure: true,
+        sameSite: "Lax",
+      });
+
+      return c.redirect(CLIENT_URL + "/login");
+    }
+
+    return c.redirect(CLIENT_URL);
   }
 );
-
-app.post("/logout", async (c) => {
-  deleteCookie(c, "state");
-  deleteCookie(c, "token");
-
-  return c.json(
-    {
-      data: null,
-      message: "Successfully logged out",
-    },
-    200
-  );
-});
 
 export default app;
